@@ -1,0 +1,40 @@
+
+.addLaserMd{
+    width: 100%;
+}
+label{
+    white-space: nowrap;
+    word-wrap: break-word;
+    text-align: left;
+    //font: normal normal bold 16px/19px Helvetica Neue;
+    letter-spacing: 0px;
+    color: #000000;
+    opacity: 1;
+    font-weight: bold;
+    font-size: 16px/20px;
+    font-family: 'Helvetica Neue', sans-serif !important;
+}
+select, input{
+    //width: auto;
+    margin-top: 5px;
+   // background: #FFFFFF 0% 0% no-repeat padding-box;
+    height: 18px;
+}
+button{
+        margin: 10px;
+       left: 5px;
+    }
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: transparent; 
+}
+
+.mat-form-field-infix{
+    border-top: unset!important;
+  }
+  ::ng-deep.dark-theme input {
+    background: #111111;
+}
+.plan{
+    color: #857c7c;
+}

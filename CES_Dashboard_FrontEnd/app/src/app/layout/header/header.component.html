@@ -1,0 +1,62 @@
+<div class="header fixed-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-toolbar>
+                    <mat-toolbar-row>
+                        <span class="brand-name">
+                            <img src="assets/Images/logo1.png" alt="icon" *ngIf="!isDarkTheme" />
+                            <img src="assets/Images/cummins_logo_1.png" alt="icon" *ngIf="isDarkTheme"
+                                style="height: 45px;" />
+                        </span>
+                        <span class="example-spacer"></span>
+                        <div class="d-flex header-list profile-box">
+                            <mat-list class="horizontal-list">
+
+                                <mat-list-item>
+                                    <img src="assets/Images/Logo-GDC.png" alt="icon" *ngIf="!isDarkTheme" />
+                                    <img src="assets/Images/logo-dark-bg.png" alt="icon" *ngIf="isDarkTheme" />
+                                </mat-list-item>
+
+                                <mat-list-item>
+                                    <mat-icon mat-button [matMenuTriggerFor]="menu" style="font-size: 24px; cursor: pointer;">
+                                        format_color_fill
+                                    </mat-icon>
+                                    <mat-menu #menu="matMenu">
+                                        <div value='light' mat-menu-item (click)="toggleTheme('light-theme');">Light
+                                        </div>
+                                        <div value='dark' mat-menu-item (click)="toggleTheme('dark-theme');">Dark
+                                        </div>
+                                    </mat-menu>
+                                </mat-list-item>
+
+                                <mat-list-item>
+                                    <button mat-button [matMenuTriggerFor]="menu1" class="user">
+                                        <mat-icon class="me-2">person</mat-icon>
+                                        <div class="profile-user">
+                                            <span class="mb-0">Welcome</span>
+                                            <p>{{fullName}}</p>
+                                        </div>
+                                        <mat-icon>keyboard_arrow_down</mat-icon>
+                                    </button>
+                                    <mat-menu #menu1="matMenu">
+
+                                        <button mat-menu-item *ngIf="isAdminflag" (click)="redirectToRRM()">
+                                            <mat-icon color="primary">supervisor_account</mat-icon>
+                                            Manage users
+                                        </button>
+                                        <button mat-menu-item (click)="Logout()">
+                                            <mat-icon color="primary" style="font-size: 20px; margin-top: 5px;">
+                                                exit_to_app</mat-icon>
+                                            Logout
+                                        </button>
+                                    </mat-menu>
+                                </mat-list-item>
+                            </mat-list>
+                        </div>
+                    </mat-toolbar-row>
+                </mat-toolbar>
+            </div>
+        </div>
+    </div>
+</div>

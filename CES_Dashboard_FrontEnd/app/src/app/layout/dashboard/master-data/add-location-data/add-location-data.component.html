@@ -1,0 +1,61 @@
+<div class="add-container">
+    <form [formGroup]="locationDataForm">
+        <div class="addLaserMd">
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <label class="fw-bold mb-2">Oracle Sub-Inventory</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border  w-100">
+                            <input matInput formControlName="oracle_sub_inventory" placeholder="Oracle Sub-Inventory"
+                                id="oracle_sub_inventory" type="text" *ngIf="isEditPage" readonly style="color: #857c7c;">
+                            <input matInput formControlName="oracle_sub_inventory" placeholder="Oracle Sub-Inventory"
+                                id="oracle_sub_inventory" type="text" *ngIf="!isEditPage">
+                        </mat-form-field>
+                        
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label class="fw-bold mb-2">Applicable For Material Script</label>
+                    <div>
+                        <mat-form-field class=" w-100 ">
+                          <mat-select #matSelect='matSelect' formControlName="app_mat_script">
+                                    <mat-option value="">Select Material Script</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label class="fw-bold mb-2">Applicable For Planning Script</label>
+                    <div>
+                        <mat-form-field class=" w-100 ">
+                        <mat-select #matSelect='matSelect' formControlName="app_plan_script">
+                                    <mat-option value="">Select Planning Script</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="text-end">
+                        <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                            (click)="dialogCancel()">Cancel</button>
+                        <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                            *ngIf="!isEditPage" (click)="saveLocationMasterData(locationDataForm.valid)">Add
+                            Data</button>
+                        <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                            (click)="saveLocationMasterData(locationDataForm.valid)" *ngIf="isEditPage">Save</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

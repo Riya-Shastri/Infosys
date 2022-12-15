@@ -1,0 +1,23 @@
+<div class="jobStatus">
+    <form [formGroup]="StatusForm">
+        <div class="addComment2">              
+            <mat-icon mat-dialog-close style="cursor: pointer; margin-left: 95%;" >close</mat-icon>
+        </div>
+        <div class="row">
+          
+                <label class="fw-bold mb-2">Comment                    
+                </label>
+                <div >
+                    <textarea matInput class="textArea" formControlName="planner_comments">                        
+                    </textarea> 
+                </div> 
+           
+            <div class="col-12">
+                    <div class="text-end">
+                        <button mat-raised-button color="warn" class="ms-2 rounded-pill" (click)="savecommentData(StatusForm.valid)"
+                          style="margin-top: 5px;margin-bottom: 15px;">PUBLISH</button> 
+                    </div>                       
+                </div>            
+        </div>
+    </form>
+</div>

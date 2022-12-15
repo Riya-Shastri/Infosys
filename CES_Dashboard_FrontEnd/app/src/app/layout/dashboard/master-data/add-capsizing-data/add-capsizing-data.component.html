@@ -1,0 +1,58 @@
+<mat-dialog-content class="mat-typography">
+    <div class="add-container">
+        <form [formGroup]="capsizingForm">
+            <div class="addLaserMd">
+                <div class="row">
+                    <div class="col-lg-6" *ngIf="!isEditPage">
+                        <label class="fw-bold mb-2"> Manufacturing Line </label>
+                        <div>
+                            <mat-form-field class="w-100 ">
+                                <mat-select #matSelect='matSelect' formControlName="line_id" [disabled]="false">
+                                    <mat-option value=""> Select Manufacturing Line</mat-option>
+                                    <mat-option class="custom-select" [disabled]="line.line_id < 9 "
+                                        *ngFor="let line of ManufacturingLine; let i = index" [value]="line.line_id">
+                                        {{line.line_name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6" *ngIf="isEditPage">
+                        <label class="fw-bold mb-1"> Manufacturing Line </label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input readonly matInput type="text" [value]="selectedLine" id="department_name"
+                                    style="color: #857c7c;">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label class="fw-bold mb-1">CapSizing</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput type="number" placeholder="CapSizing" id="capsize" min="0"
+                                    formControlName="capsize">
+                            </mat-form-field>
+                            <span *ngIf="f['capsize']['errors'] && f['capsize']['errors']['min']">
+                                Capsizing value should be greater than 0
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-end">
+                            <button mat-stroked-button (click)="dialogCancel()" color="warn"
+                                class="ms-2 rounded-pill">Cancel</button>
+                            <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                                *ngIf="!isEditPage" (click)="saveCapsizeData(capsizingForm.valid)">Add
+                                Data</button>
+                            <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                                (click)="saveCapsizeData(capsizingForm.valid)" *ngIf="isEditPage">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>

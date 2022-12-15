@@ -1,0 +1,17 @@
+<div class="mt-2">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h2>Planner Code</h2>
+        </div>
+        <div>
+            <img matTooltip="Add" src="assets/SVG/addData.svg" alt="add" class="mx-3" style="cursor: pointer;"
+                (click)="openDialog()">
+        </div>
+    </div>
+    <app-master-common-table [columns]="columns" [dataset]="dataSource" [componentName]="'PlannerCode'"
+        (deleteData)="deleteData($event)" (dataSort)="sortChange($event)" [totalRecords]="totalRecords"
+        [currentPageSize]="currentPageSize" (emitPagesValue)="emitPagesValue($event)"
+        [defaultShortKey]="{ id: 'last_updated_date', start: 'desc'}">
+    </app-master-common-table>
+
+</div>

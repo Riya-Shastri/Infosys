@@ -1,0 +1,67 @@
+<div class="jobStatus">
+    <form [formGroup]="jobStatusForm">
+        <div class="addComment2">
+            <mat-icon mat-dialog-close style="cursor: pointer; margin-left: 95%;">close</mat-icon>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <label class="fw-bold mb-2">Job Status
+                </label>
+                <div>
+                    <mat-form-field>
+                        <mat-select #matSelect='matSelect' formControlName="jobstatus_id"
+                            (change)="selectChangeHandler($event)">
+                            <mat-select-trigger style="display: flex; align-items: center;">
+                                <mat-icon [ngStyle]="{ color : (f.jobstatus_id.value && f.jobstatus_id.value['status_color']) ? 
+                                    f.jobstatus_id.value['status_color'] : ''}">
+                                    fiber_manual_record
+                                </mat-icon>
+                                {{(f.jobstatus_id.value['status_name']) ?
+                                f.jobstatus_id.value['status_name'] : ''}}
+                            </mat-select-trigger>
+
+                            <mat-option *ngFor="let drive of jobStatusDropdown" [value]="drive">
+                                <mat-icon [ngStyle]="{ color : drive.status_color}">
+                                    fiber_manual_record</mat-icon>
+                                {{drive.status_name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <label class="fw-bold mb-2">Comment
+                </label>
+                <div>
+                    <textarea matInput class="textArea" formControlName="addComment">
+                    </textarea>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="text-end">
+                    <button mat-raised-button color="warn" class="ms-2 rounded-pill"
+                        (click)="saveComment()">Save</button>
+                </div>
+            </div>
+            <div class="commentHistory" *ngIf="commentList && commentList.length > 0">
+                <div *ngFor="let add of commentList">
+                    <p>{{add['comments']}}</p>
+                    <div class="d-flex justify-content-between">
+                        <mat-icon [ngStyle]="{ color : add['status_color']}" style="margin-left: -5px;">
+                            fiber_manual_record</mat-icon>
+
+                        <span>{{add['last_updated_date'] | date: 'MM-dd-yyyy HH:mm:ss'}}</span>
+
+                        <span>{{add['last_updated_by']}}</span>
+
+                    </div>
+                    <mat-divider></mat-divider>
+                </div>
+            </div>
+            <div class="commentHistory" *ngIf="!commentList || commentList.length == 0">
+                <p>No comment</p>
+            </div>
+
+        </div>
+    </form>
+</div>

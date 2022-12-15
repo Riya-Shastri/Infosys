@@ -1,0 +1,59 @@
+<mat-dialog-content class="mat-typography">
+    <div class="add-container">
+        <form [formGroup]="departmentForm">
+            <div class="addLaserMd">
+                <div class="row">
+                    <div class="col-lg-6" *ngIf="!isEditPage">
+                        <label class="fw-bold mb-2"> Select Department </label>
+                        <div>
+                            <mat-form-field class="w-100 ">
+                                <mat-select #matSelect='matSelect' formControlName="department_name">
+                                    <mat-option value=""> Select Department</mat-option>
+                                    <mat-option class="custom-select"
+                                        *ngFor="let line of ManufacturingLine; let i = index" [value]="line.line_name">
+                                        {{line.line_name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6" *ngIf="isEditPage">
+                        <label class="fw-bold mb-1">Department</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input readonly matInput type="text" formControlName="department_name"
+                                    id="department_name" style="color: #857c7c;">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <label class="fw-bold mb-1">Priority</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput type="number" formControlName="priority_mat_alloc"
+                                    placeholder="Enter Priority" min="0" id="priority_mat_alloc" class="pb-0">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="text-end">
+                            <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                                (click)="dialogCancel()">Cancel</button>
+                            <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                                (click)="saveDepartmentData(departmentForm.valid)" *ngIf="!isEditPage">Add
+                                Data</button>
+                            <button type="submit" mat-raised-button color="warn" *ngIf="isEditPage"
+                                (click)="saveDepartmentData(departmentForm.valid)" class="ms-2 rounded-pill">
+                                Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+</mat-dialog-content>

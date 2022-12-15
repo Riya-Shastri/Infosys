@@ -1,0 +1,70 @@
+<div class="add-container">
+    <form [formGroup]="updateShiftForm">
+        <div class="addLaserMd">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Line</label>
+                    <div>
+                        <span>{{line_name}}</span>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">1st Shift Start</label>
+                    <div class="ngx-timepicker-field-example">
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="first_shift_s_t" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3 ">
+                    <label class="fw-bold mb-2">1st Shift End</label>
+                    <div class="ngx-timepicker-field-example">
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="first_shift_e_t" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">2nd Shift Start</label>
+                    <div class="ngx-timepicker-field-example">
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="second_shift_s_t" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">2nd Shift End</label>
+                    <div class="ngx-timepicker-field-example">
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="second_shift_e_t" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">3rd Shift Start</label>
+                    <div class="ngx-timepicker-field-example">
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="third_shift_s_t" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">3rd Shift End</label>
+                    <div class="ngx-timepicker-field-example">
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="third_shift_e_t" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="text-end">
+                        <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                            (click)="dialogCancel()">Cancel</button>
+                        <button type="submit" mat-raised-button color="warn" (click)="saveShiftTimeData(updateShiftForm.valid)"
+                            class="ms-2 rounded-pill"> Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

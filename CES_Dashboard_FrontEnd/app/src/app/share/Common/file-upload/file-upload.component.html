@@ -1,0 +1,67 @@
+<div class="center">
+    <div *ngIf="componentName!='scheduler'" mat-dialog-title
+        style="float: right; margin-bottom: 5px; margin-top: 55px;">
+        <div mat-dialog-actions style="min-height:0px !important; position: relative;">
+            <mat-icon style="color:#ACACAC;cursor:pointer; position: absolute; top: -70px; right: -11px;"
+                (click)="dialogCancel()">clear
+            </mat-icon>
+        </div>
+    </div>
+    <div *ngIf="componentName!='scheduler'" class="fileup">
+        <span class="fileuploadtitle">Upload File</span>
+    </div>
+
+    <ngx-file-drop dropZoneLabel="Drop files here" #fileInput (onFileDrop)="dropped($event)"
+        (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)" accept=".xls ,.xlsx">
+        <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            <img src="assets/SVG/ico-upload.svg" class="m-3" alt="icon" *ngIf="!isDarkTheme" />
+            <img src="assets/SVG/ico-upload_dark.svg" class="m-3" alt="icon" *ngIf="isDarkTheme" />
+            <span> Drag & Drop file here or </span>
+            <a href="javascript:void(0)" (click)="openFileSelector()" class="m-1">
+                Browse
+            </a>
+        </ng-template>
+    </ngx-file-drop>
+
+    <div class="error mt-2 " *ngIf="errorMsg!==undefined && errorMsg!==null && errorMsg?.length>0">
+        {{errorMsg}}
+    </div>
+
+    <div class="upload-table w-100" *ngIf="files && files.length > 0">
+        <table class="table w-100 mt-2" aria-describedby="fileUpload">
+            <thead *ngIf="componentName!='scheduler'">
+                <tr>
+                    <th id="noUse"></th>
+                </tr>
+            </thead>
+            <tbody class="upload-name-style">
+                <tr *ngFor="let item of files; let i=index">
+                    <td class="p-0 border-0">
+                        <div class="attached_files">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="../../../../assets/Images/file_upload.svg" width="26" alt="icon">
+                                <span class="viewfilename">{{ item.relativePath }}</span>
+                            </div>
+                            <mat-icon class="click_close" (click)="removeFile()">close</mat-icon>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12">
+        <div class="text-end uploadbuttons">
+            <button *ngIf="componentName!='scheduler'" mat-stroked-button color="warn" class="ms-2"
+                (click)="dialogCancel()">CANCEL</button>
+            <button *ngIf="componentName!='scheduler'" type="submit" mat-raised-button color="warn" class="ms-2"
+                [disabled]="!fileuploaded" (click)="uploadfileData();">UPLOAD</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" *ngIf="isLoading">
+    <div class="center-load">
+        <mat-progress-spinner class="spinner" [color]="color" [mode]="mode" [value]="value">
+        </mat-progress-spinner>
+    </div>
+</div>

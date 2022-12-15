@@ -1,0 +1,53 @@
+
+.list-group-item {
+    z-index: 2;
+    color: #666666;
+    border-bottom-width: 0px;
+    background-color: transparent !important;
+    border-inline: none !important;
+    border-top: none !important;
+    font-size: medium !important;
+    border-color: #6666664d;
+    padding: 12px 0;
+    margin: 0 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.list-group-item:first-child,
+.list-group-item.active:first-child{
+    margin-left: 0 !important;
+}
+
+.list-group-item.active{
+    margin: 0 18px !important;
+    background-color: transparent !important;
+    border-inline: none !important;
+    border-top: none!important;
+    border-color: #e31b1b !important;
+    border-bottom-width: medium;
+    color: #000;
+}
+::ng-deep .dark-theme .list-group-item.active{
+    color: #FFFF;
+}
+
+.list-group.border-bottom{
+    border-bottom: 1px solid #E5E5E5;
+}
+::ng-deep .dark-theme .list-group{
+    background:#424242;
+    color: #FFFF;
+}
+::ng-deep .dark-theme .list-group-item{
+    color: #FFFF;
+}
+
+
+.sticky-tab{
+    position: sticky;
+    top: 0px;
+    z-index: 999;
+    background-color: #fff;
+}

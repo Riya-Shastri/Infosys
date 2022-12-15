@@ -1,0 +1,86 @@
+.filter_open{
+    background-color: #f0f0f0;
+    width: 700px;
+    padding: 30px;
+    position: absolute;
+    top: 100%;
+   // margin-top: 15px;
+    z-index: 999;
+}
+
+::ng-deep .dark-theme .filter_open{
+  background-color: #3f3f3f;
+  border: 1px solid #a3a3a3;
+  .mat-form-field{
+    .mat-form-field-flex{
+      background: #000;
+      color: #fff;
+    }
+  }
+}
+
+.example-form-field {
+    margin: 0 8px 16px 0;
+  }
+
+  .md-datepicker-button.md-icon-button {
+    display: none;
+  }
+
+  #my-date-picker .md-datepicker-calendar-icon {
+    color: green;
+    display: none;
+}
+
+.matchip{
+background: #FFFFFF 0% 0% no-repeat padding-box;
+border: 1px solid #DA291C;
+border-radius: 20px;
+opacity: 1;
+letter-spacing: 0px;
+color: #000000;
+padding: 15px;
+}
+
+.filterchip{
+  margin-top: 5px;
+}
+.filterbutton{
+  margin-bottom: 10px;
+}
+
+.mat-chip-white .mat-chip-remove {
+color: #000000;
+}
+
+::ng-deep .dark-theme {
+
+  .header{
+    background-color:  #DA291C;
+    color: #ffffff;
+  }
+
+  .filterbutton{
+    background-color: #424242;
+    color: white;
+    border-color: #a3a3a3!important;
+  }
+
+  .form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    background: black;
+  }
+
+  input::placeholder{
+    background-color: black;
+    color: white;
+  }
+
+  .mat-input-element::placeholder{
+    background-color: black;
+    color: white!important;
+  }
+
+}
+.mat-form-field-label {
+  font-weight: 600;
+}

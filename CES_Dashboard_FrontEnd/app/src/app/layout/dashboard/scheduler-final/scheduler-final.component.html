@@ -1,0 +1,368 @@
+<form [formGroup]="schedulerFinalForm" class="mt-3">
+    <div>
+        <div class="row mt-2">
+            <div class="col-md-4 col-lg-4">
+                <label class="fw-bold mb-2"> Manufacturing Line
+                    <span class="text-danger"> * </span>
+                </label>
+                <div>
+                    <mat-form-field class="w-100">
+                        <mat-select #matSelect='matSelect' formControlName="line_id" (selectionChange)="selectedLine()">
+                            <mat-option value=""> Select Manufacturing Line</mat-option>
+                            <mat-option class="custom-select" *ngFor="let line of manufacturingLine; let i = index"
+                                [value]="line.line_id" (click)="getselectedLine(line.line_name)">
+                                {{line.line_name}}
+                                <img [src]="line.ping ? 'assets/SVG/red-pin.svg' :  'assets/SVG/unpin.svg' "
+                                    height="15px" class="me-2" (click)=" openPinDialog(line.ping, i ,line.line_name)"
+                                    alt="pinIcon" *ngIf="!isDarkTheme" />
+
+                                <img [src]="line.ping ? 'assets/SVG/red-pin.svg' :  'assets/SVG/unpin_dark.svg' "
+                                    *ngIf="isDarkTheme" height="15px" class="me-2"
+                                    (click)=" openPinDialog(line.ping, i ,line.line_name)" alt="pinIcon" />
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-md-4 col-lg-4"></div>
+            <div class="col-md-4 col-lg-4" *ngIf="favoriteLines && favoriteLines.length > 0">
+                <div class="d-flex justify-content-end">
+                    <div class="text-end" *ngFor="let lines of favoriteLines">
+                        <div *ngIf="f['line_id'].value === lines['line_id']">
+                            <button mat-raised-button color="warn" class="m-2 rounded-pill fav"
+                                (click)="favoriteBtnClick(lines)">{{lines['line_name']}}</button>
+                        </div>
+                        <div *ngIf="f['line_id'].value !== lines['line_id']">
+                            <button mat-stroked-button color="warn" class="m-2 rounded-pill fav"
+                                (click)="favoriteBtnClick(lines)">{{lines['line_name']}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="f['line_id'].value">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="position-relative">
+                        <app-filter (filterData)="filterData($event)" [componentName]="'schedulerFinal'">
+                        </app-filter>
+                    </div>
+                    <div>
+                        <img matTooltip="Export To Excel" src="assets/SVG/file_upload.svg" alt="icon" class="mx-3"
+                            style="cursor: pointer;" (click)="exportBtnClick('export-to-excel')">
+
+                        <img matTooltip="Export To Mail" src="assets/SVG/exportEmail.svg" alt="Export-mail" class="mx-3"
+                            style="cursor: pointer;" (click)="exportBtnClick('export-to-email')">
+
+                        <img matTooltip="Move" [matTooltip]="  (f['line_name'].value && ( f['line_name'].value == 'A2000'))
+                         ? 'Move to A2100' : ( f['line_name'].value && ( f['line_name'].value == 'A2100') )
+                         ? 'Move to A2000' : ''" src="assets/SVG/moveorder.svg" alt="Move" style="cursor: pointer;"
+                            class="mx-3" *ngIf="isAccessflag && 
+                            ( f['line_name'].value && ( f['line_name'].value == 'A2000' ||
+                             f['line_name'].value == 'A2100')) && (userRole.includes('CMP-User-Admin') ||
+                             userRole.includes('CMP-Scheduler') )" (click)="saveData('Move')">
+
+                        <img matTooltip="Delete" src="assets/SVG/delete.svg" alt="Delete" class="mx-3"
+                            style="cursor: pointer;" (click)="saveData('delete')" *ngIf="isAccessflag &&  ( userRole.includes('CMP-User-Admin') ||
+                          userRole.includes('CMP-Scheduler') ) ">
+
+                        <img matTooltip="Save Sequence" src="assets/SVG/sequence.svg" alt="Save Sequence" class="mx-3"
+                            style="cursor: pointer;" (click)="saveJobSequence()" *ngIf="isAccessflag && ( userRole.includes('CMP-User-Admin') ||
+                           userRole.includes('CMP-Scheduler') || userRole.includes('CMP-Materials') ) ">
+
+                        <img matTooltip="Save" src="assets/SVG/save.svg" alt="Save" class="mx-3"
+                            style="cursor: pointer;" (click)="saveData('save')" *ngIf="isAccessflag && 
+                  ( userRole.includes('CMP-User-Admin') || userRole.includes('CMP-Scheduler') ) ">
+
+                        <img matTooltip="Publish" src="assets/SVG/publish.svg" alt="Publish" class="mx-3"
+                            style="cursor: pointer;" (click)="saveData('publish')" *ngIf="isAccessflag && 
+                   ( userRole.includes('CMP-User-Admin') || userRole.includes('CMP-Scheduler') ||
+                    userRole.includes('CMP-Materials')) ">
+
+                        <img matTooltip="BOM" src="assets/Images/bom.png" alt="bom" class="mx-3"
+                            (click)="saveData('bom')" style="cursor: pointer; width: 36px;" *ngIf="isAccessflag && 
+                                ( userRole.includes('CMP-User-Admin') || userRole.includes('CMP-Scheduler') ||
+                                 userRole.includes('CMP-Materials')) ">
+
+                        <img matTooltip="Acknowledge" src="assets/Images/acknow.png" alt="acknow" class=""
+                            (click)="saveData('acknowledge')" style="cursor: pointer; width: 60px;" *ngIf="isAccessflag && 
+                        ( userRole.includes('CMP-User-Admin') || userRole.includes('CMP-Scheduler'))">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row mt-2" *ngIf="f['line_id'].value">
+    <div class="col-12" *ngIf="schedulerFinalTableForm">
+
+        <form [formGroup]="schedulerFinalTableForm">
+
+            <div class="table-container scrollContent" #keywordsInput cdkScrollable>
+                <table mat-table [dataSource]="dataSource" #myTable formArrayName="tableData"
+                    class="border mat-elevation-z8" aria-describedby="schedulerFinal" cdkDropList
+                    [cdkDropListAutoScrollDisabled]="false" [cdkDropListAutoScrollStep]="35"
+                    [cdkDropListData]="dataSource" (cdkDropListDropped)="dropTable($event)">
+
+                    <ng-container *ngIf="( userRole.includes('CMP-User-Admin') ||
+                    userRole.includes('CMP-Scheduler') || userRole.includes('CMP-Materials'))">
+                        <ng-container matColumnDef="select" sticky
+                            *ngIf="(newtableData['routes'] || newtableData['routes']?.length > 0)">
+                            <th mat-header-cell *matHeaderCellDef id="check">
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let row"
+                                [ngStyle]="{'background-color': row['is_published_finaldb'] === 1 ?'rgb(210 206 206 / 91%)':'' }">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-container *ngFor="let column of newtableData['col'] ; let colindex = index ">
+
+                        <ng-container *ngIf="column.columnDef === 'job_num' ||
+                        column.columnDef === 'ces_part_num' || 
+                        column.columnDef === 'ces_part_num_catmod' || 
+                        column.columnDef === 'filter_ces_part_num' || 
+                        column.columnDef === 'outlet_ces_part_num' || 
+                        column.columnDef === 'mixer_ces_part_num' || 
+                        column.columnDef === 'inlet_ces_part_num' ">
+
+                            <ng-container [matColumnDef]="column.columnDef" sticky>
+
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                    {{column.header}}
+                                </th>
+
+                                <td mat-cell *matCellDef="let element ; let i = index;" [formGroupName]="i"
+                                    [ngStyle]="{'background-color': element['is_published_finaldb'] === 1 ?'rgb(210 206 206 / 91%)':'' }">
+                                    <div>
+                                        <span class="ces">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                    </div>
+                                </td>
+
+                            </ng-container>
+
+                        </ng-container>
+
+                        <ng-container *ngIf="column.columnDef !== 'job_num' &&
+                        column.columnDef !== 'ces_part_num' && 
+                        column.columnDef !== 'ces_part_num_catmod' && 
+                        column.columnDef !== 'filter_ces_part_num' && 
+                        column.columnDef !== 'outlet_ces_part_num' &&
+                        column.columnDef !== 'mixer_ces_part_num' &&
+                        column.columnDef !== 'inlet_ces_part_num'">
+
+                            <ng-container [matColumnDef]="column.columnDef" *ngIf="( userRole.includes('CMP-User-Admin') ||
+                    userRole.includes('CMP-Scheduler') )">
+
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                    {{column.header}}
+                                </th>
+
+                                <td mat-cell *matCellDef="let element ; let i = index;" [formGroupName]="i" [ngStyle]="{
+                                    'background-color':
+                                    (element['is_published_finaldb'] == 1  && (schedulerFinalForm.value['is_parent'] ||
+                                    schedulerFinalForm.value['is_module'] ||
+                                    schedulerFinalForm.value['is_canning']  ) ) ||  (element['is_published_finaldb'] == 1 &&
+                                 (element.is_cancelled || element.edit_scheduled_qunatity) && 
+                                 schedulerFinalForm.value['is_module']  &&
+                                           (column.columnDef !== 'part_description' && 
+                                           column.columnDef !== 'internal_customer' 
+                                           && column.columnDef !== 'run_date' &&
+                                           column.columnDef !== 'drive_dependent_demand' &&
+                                           column.columnDef !== 'scheduled_qunatity' &&
+                                           column.columnDef !== 'customer_due_date') )?
+                                      'rgb(210 206 206 / 91%)':'' }" [ngClass]="(element.is_cancelled || element.edit_scheduled_qunatity) && 
+                                          (colindex > 1 && colindex < 9) ? 'is_cancle' : 'null'">
+
+                                    <span *ngIf="column.columnDef !== 'job_num'  &&
+                                        column.columnDef !== 'ces_part_num' &&
+                                        column.columnDef !== 'customer_partno' &&
+                                        column.columnDef !== 'comments' &&
+                                        column.columnDef !== 'scheduled_qunatity' && 
+                                        column.columnDef !== 'drive_dependent_demand' && 
+                                        column.columnDef !== 'customer_due_date' && 
+                                        column.columnDef !== 'run_date' &&
+                                        column.columnDef !== 'firsttime_runner' &&
+                                        column.columnDef !== 'part_description' &&
+                                        column.columnDef !== 'job_flow'">
+                                        {{element[column.columnDef]}}
+                                    </span>
+                                    <span *ngIf="column.columnDef == 'job_flow'"
+                                        style="text-align: center; display: block;">
+                                        <img src="assets/SVG/jobFlow.svg" alt="icon" style="cursor: pointer;"
+                                            (click)="jobFlow(element)">
+                                    </span>
+                                    <span *ngIf="column.columnDef == 'part_description'" class="part"
+                                        [matTooltip]="element['part_description']">
+                                        {{element[column.columnDef]}}
+                                    </span>
+                                    <span *ngIf="column.columnDef == 'run_date' ||
+                                    column.columnDef == 'customer_due_date'" class="ces">
+                                        {{element[column.columnDef] | date: 'MM-dd-yyyy'}}
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'drive_dependent_demand' ||
+                                         column.columnDef == 'firsttime_runner'">
+                                        {{element[column.columnDef] ? 'Yes' : 'No'}}
+                                    </span>
+
+                                    <span *ngIf="schedulerFinalForm.value['is_parent']  &&
+                                    column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                    !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_module']) ? 
+                                     (element['updated_canning'] ? element['updated_canning'] : element['updated_module'])+
+                                    ' is updated. ': 
+                                     element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_canning'] && element['deleted_module'])
+                                     ?(element['deleted_canning']) +' and '+ (element['deleted_module'])+
+                                    ' is cancelled. ':
+                                     element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_canning'] || element['deleted_module'])
+                                     ?(element['deleted_canning'] ? element['deleted_canning'] : element['deleted_module'])+ 
+                                    ' is cancelled. ': 
+                                    element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_module']) && (element['deleted_canning'] && element['deleted_module']) 
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_module']) +
+                                    ' is updated. and ' + (element['deleted_canning']) +' and '+ (element['deleted_module']) + 
+                                    ' is cancelled. ':
+                                     element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_module'])&&(element['deleted_canning'] || element['deleted_module'])
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_module'])+
+                                     ' is updated. and '+(element['deleted_canning'] ? element['deleted_canning'] : element['deleted_module'])+
+                                    ' is cancelled. ': ''">
+                                        <mat-form-field class="w-75">
+                                            <input matInput type="number" min="0" formControlName="scheduled_qunatity">
+                                        </mat-form-field>
+                                    </span>
+
+                                    <span *ngIf="schedulerFinalForm.value['is_module']  &&
+                                    column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                    !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_parent'] || element['updated_canning']) ? 
+                                     (element['updated_canning'] ? element['updated_canning'] : element['updated_parent'])+
+                                    ' is updated. ': 
+                                     element.is_cancelled && !element.edit_scheduled_qunatity &&(element['deleted_canning'] && element['deleted_parent'])
+                                     ?(element['deleted_canning']) +' and '+ (element['deleted_parent'])+
+                                    ' is cancelled. ':
+                                    element.is_cancelled && !element.edit_scheduled_qunatity &&(element['deleted_canning'] || element['deleted_parent'])?  (element['deleted_canning'] ? element['deleted_canning'] : element['deleted_parent'])+ 
+                                    ' is cancelled. ':
+                                    element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_parent']) && (element['deleted_canning'] && element['deleted_parent']) 
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_parent']) +
+                                    ' is updated. and ' + (element['deleted_canning']) +' and '+ (element['deleted_parent']) + 
+                                    ' is cancelled. ':
+                                     element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_parent'])&&(element['deleted_canning'] || element['deleted_parent'])
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_parent'])+
+                                     ' is updated. and '+(element['deleted_canning'] ? element['deleted_canning'] : element['deleted_parent'])+
+                                    ' is cancelled. ': ''">
+                                        <mat-form-field class="w-75">
+                                            <input matInput type="number" min="0" formControlName="scheduled_qunatity">
+                                        </mat-form-field>
+                                    </span>
+                                    <span *ngIf="schedulerFinalForm.value['is_canning'] &&
+                                    column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                    !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_parent'] || element['updated_module']) ? 
+                                     (element['updated_parent'] ? element['updated_parent'] : element['updated_module'])+
+                                    ' is updated. ':
+                                    element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_parent'] && element['deleted_module'])
+                                    ?(element['deleted_parent']) +' and '+ (element['deleted_module'])+
+                                   ' is cancelled. ': 
+                                     element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_parent'] || element['deleted_module'])
+                                     ?  (element['deleted_parent'] ? element['deleted_parent'] : element['deleted_module'])+ 
+                                    ' is cancelled. ':
+                                    element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_module'] || element['updated_parent']) && (element['deleted_module'] && element['deleted_parent']) 
+                                     ?(element['updated_module'] ? element['updated_module'] : element['updated_parent']) +
+                                    ' is updated. and ' + (element['deleted_module']) +' and '+ (element['deleted_parent']) + 
+                                    ' is cancelled. ':
+                                     element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_module'] || element['updated_parent'])&&(element['deleted_module'] || element['deleted_parent'])
+                                     ?(element['updated_module'] ? element['updated_module'] : element['updated_parent'])+
+                                     ' is updated. and '+(element['deleted_module'] ? element['deleted_module'] : element['deleted_parent'])+
+                                    ' is cancelled. ': ''">
+                                        <mat-form-field class="w-75">
+                                            <input matInput type="number" min="0" formControlName="scheduled_qunatity">
+                                        </mat-form-field>
+                                    </span>
+
+                                    <span *ngIf="schedulerFinalForm.value['line_name'] === 'HHP' &&
+                                column.columnDef == 'customer_partno' ">
+                                        <mat-form-field class="w-75">
+                                            <input matInput type="text" min="0" formControlName="customer_partno">
+                                        </mat-form-field>
+                                    </span>
+
+                                    <span *ngIf="schedulerFinalForm.value['line_name'] !== 'HHP' && 
+                                    column.columnDef == 'customer_partno'">
+                                        {{element[column.columnDef]}}
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'comments'">
+                                        <mat-form-field>
+                                            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                                                maxlength="4000" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+                                                formControlName="comments">
+                                            </textarea>
+                                        </mat-form-field>
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container [matColumnDef]="column.columnDef" *ngIf="( 
+                                !userRole.includes('CMP-User-Admin') &&
+                                 !userRole.includes('CMP-Scheduler') )">
+
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                    {{column.header}}
+                                </th>
+
+                                <td mat-cell *matCellDef="let element ; let i = index;" [formGroupName]="i"
+                                    [ngStyle]="{'background-color': element['is_published_finaldb'] === 1 ?'rgb(210 206 206 / 91%)':'' }">
+                                    <div>
+                                        <span *ngIf="column.columnDef !== 'run_date' &&
+                                        column.columnDef !== 'customer_due_date'">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                        <span *ngIf="column.columnDef == 'run_date' ||
+                                        column.columnDef == 'customer_due_date'" class="ces">
+                                            {{element[column.columnDef] | date: 'MM-dd-yyyy'}}
+                                        </span>
+                                    </div>
+                                </td>
+
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="tableColumns;sticky: true"></tr>
+
+                    <tr mat-row *matRowDef="let element; let i = index; columns: tableColumns;" [formGroupName]="i"
+                        cdkDrag [cdkDragData]="element">
+                    </tr>
+
+                </table>
+
+                <ng-container
+                    *ngIf="norecord && (f['line_id'].value &&( !newtableData['routes'] || newtableData['routes'].length == 0))">
+                    <span class="text-danger m-5" style="display: block; text-align: center;">
+                        No records found
+                    </span>
+                </ng-container>
+
+            </div>
+        </form>
+    </div>
+</div>

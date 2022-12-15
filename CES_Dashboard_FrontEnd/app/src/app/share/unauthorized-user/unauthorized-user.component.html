@@ -1,0 +1,31 @@
+<div class="header fixed-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-toolbar>
+                    <mat-toolbar-row>
+                        <span class="brand-name">
+                            <img src="assets/Images/logo1.png" alt="icon" />
+                        </span>
+                        <span class="example-spacer"></span>
+                    </mat-toolbar-row>
+                </mat-toolbar>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="authtype =='multiple'" class="flex-grid" style="display: flex; justify-content: center;margin-top: 15%;">
+    <h2>
+            You have been assigned with multiple roles. Please contact with<a
+            style="text-decoration: underline; cursor: pointer;" href="#">
+            CMP Dashboard Admin</a> to assign you with one proper role and then access to application.</h2>
+</div>
+<div *ngIf="authtype =='single'" class="flex-grid" style="display: flex; justify-content: center;margin-top: 15%;">
+    <h2>
+        You are not authorized to use CMP Dashboard application. Please contact with <a
+            style="text-decoration: underline; cursor: pointer;" href="#">
+            CMP Dashboard Admin</a> to get access into this application.</h2>
+</div>
+
+<app-footer></app-footer>

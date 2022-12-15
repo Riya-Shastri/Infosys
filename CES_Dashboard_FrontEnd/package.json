@@ -1,0 +1,36 @@
+{
+  "name": "serverless-webapp-s3-cloudfront",
+  "version": "1.0.0",
+  "description": "An example application that can create frontend AWS resources, create the build and deploy them",
+  "main": "handler.js",
+  "config": {
+    "package": ".serverless"
+  },
+  "scripts": {
+    "postinstall": "cd app && npm install",
+    "start": "cd app && npm run start",
+    "build:dev": "cd app && npm run dev-build",
+    "build:stg": "cd app && npm run stg-build",
+    "build:prd": "cd app && npm run prd-build",
+    "test": "cd app && npm run test",
+    "eject": "cd app && npm run eject",
+    "copy": "copyfiles -u 1",
+    "zip": "node sls-webapp"
+  },
+  "keywords": [
+    "Serverless"
+  ],
+  "author": "Shailendra Singh",
+  "license": "MIT",
+  "dependencies": {
+    "copyfiles": "^2.4.1",
+    "create-react-app": "^3.0.0",
+    "serverless": "^2.66.2"
+  },
+  "devDependencies": {
+    "bestzip": "^2.2.0",
+    "serverless-cloudfront-invalidate": "^1.11.0",
+    "serverless-s3-sync": "^1.17.3",
+    "serverless-scriptable-plugin": "^1.2.2"
+  }
+}

@@ -1,0 +1,24 @@
+<div class="profileContainer">   
+
+    <div class="my-profile">
+        <div class="profile-title">Hello, {{userName}} </div>
+        
+        <p class="subtitle">Here is an overview of {{userName}}'s profile</p>
+    </div>
+
+     <div class="certificatecard">
+       <mat-card class="userprofile"> 
+           <mat-card-content>
+               <p>First Name</p><span>{{userName}}</span> 
+             <p *ngIf="middleName">Middle Name</p><span  *ngIf="middleName">{{middleName}}</span> 
+               <p>Last Name</p><span>{{userLastName}}</span>  
+           </mat-card-content>
+           <div class="text-box">
+                <p>WWID </p><span>{{WWID | uppercase}}</span> <br><br>
+                <p>Assigned Role</p><span>{{assigned_roles}}</span>    
+           </div>         
+       </mat-card>
+
+    </div> 
+
+</div>

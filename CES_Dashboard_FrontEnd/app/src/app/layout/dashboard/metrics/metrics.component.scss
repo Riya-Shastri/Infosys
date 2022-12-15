@@ -1,0 +1,11 @@
+  .current_date{
+    background: #f4b541!important;
+  }
+  ::ng-deep .dark-theme .current_date{    
+    td.mat-cell {
+      background: #f4b541!important;
+  }
+  }
+  th.mat-header-cell{
+    font-weight: 600;
+  }

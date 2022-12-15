@@ -1,0 +1,13 @@
+<div class="main-container sticky-tab">
+    <ul class="list-group list-group-horizontal border-bottom">
+        <li class="list-group-item" *ngFor="let dashboard of mainMenu ; let i = index"
+            (click)="activeTab(i , dashboard )" [ngClass]="i === currentTabIndex ? 'active' : '' ">
+            {{dashboard.menu}}
+        </li>
+    </ul>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <router-outlet></router-outlet>
+    </div>
+</div>

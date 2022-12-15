@@ -1,0 +1,13 @@
+<div class="mt-2">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="shiftTiming">
+            <h2>Shift Timing</h2>
+        </div>
+    </div>
+    <app-master-common-table [columns]="columns" [dataset]="dataSource" [componentName]="'ShiftTiming'"
+        (dataSort)="sortChange($event)" [totalRecords]="totalRecords"
+        [currentPageSize]="currentPageSize" (emitPagesValue)="emitPagesValue($event)"
+        [defaultShortKey]="{ id: 'st_updated_date', start: 'desc'}">
+    </app-master-common-table>
+
+</div>

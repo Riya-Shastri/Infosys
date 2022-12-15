@@ -1,0 +1,77 @@
+<div>
+    <div class="table-container">
+
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)"
+            class="mat-elevation-z8 mt-2" #myTable aria-describedby="commontable">
+
+            <ng-container *ngFor="let column of columns">
+                <ng-container [matColumnDef]="column.columnDef" *ngIf="column.columnDef!='action'  && (column.columnDef == 'created_date'
+                || column.columnDef == 'last_updated_date'|| column.columnDef == 'st_updated_date')">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header id="forDateFormat">
+                        {{column.header}}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span>
+                            {{element[column.columnDef] | date: 'MM-dd-yyyy'}}
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container [matColumnDef]="column.columnDef" *ngIf="column.columnDef!='action' && column.columnDef != 'created_date'
+                 && column.columnDef != 'last_updated_date'  && column.columnDef != 'st_updated_date' && column.columnDef!='ces_part_rolledbody' && column.columnDef != 'cespart_no'
+                 && column.columnDef != 'ces_tla_part'">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header id="formatWithoutDate">
+                        {{column.header}}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span>
+                            {{element[column.columnDef]}}
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container [matColumnDef]="column.columnDef" *ngIf="column.columnDef=='action'" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef id="forAction">
+                        {{column.header}}</th>
+                    <td mat-cell *matCellDef="let element let i=index" class="actioncolumn">
+
+                        <mat-icon class="toolbar-button" (click)="openEditDialog(element , i , 'edit')"
+                            >edit
+                        </mat-icon>
+
+                        <mat-icon *ngIf="componentName!='ShiftTiming'" class="toolbar-button" (click)="openDeleteDialog(element)">
+                            delete
+                        </mat-icon>
+
+                    </td>
+                </ng-container>
+                <ng-container [matColumnDef]="column.columnDef" *ngIf=" column.columnDef!='action' && (column.columnDef=='ces_part_rolledbody' || column.columnDef == 'cespart_no'
+                 || column.columnDef == 'ces_tla_part')" sticky>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header id="sticky">
+                        {{column.header}}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <span>
+                            {{element[column.columnDef]}}
+                        </span>
+                    </td>
+                </ng-container>
+
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky : true"></tr>
+            <tr mat-row *matRowDef="let element; columns: displayedColumns;"></tr>
+
+        </table>
+
+        <ng-container *ngIf="norecord && (!dataset || dataset.length == 0)">
+            <span class=" w-100 text-danger m-5" style="display: block;
+            text-align: center;">
+                No records found
+            </span>
+        </ng-container>
+
+    </div>
+
+    <mat-paginator id="MatPaginator" [hidden]="(!dataSource || !dataSource.data || dataSource.data.length==0 ||
+    (this.componentName=='CapSizingData') || (this.componentName=='DepartmentPriority'))"
+        style="background-color: transparent !important;" showFirstLastButtons [length]="totalRecords" #paginator
+        [pageSize]="currentPageSize" [pageSizeOptions]="[10, 20, 30, 40, 50,100]" (page)="onPaginateChange($event)">
+    </mat-paginator>
+
+</div>

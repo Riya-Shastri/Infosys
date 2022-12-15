@@ -1,0 +1,105 @@
+<form [formGroup]="filterForm">
+
+    <button mat-stroked-button (click)="openFliter()" class="filterbutton">
+        <img src="assets/SVG/ico-filter.svg" height="13px" class="md-2" alt="icon" *ngIf="!isDarkTheme" />
+        <img src="assets/SVG/ico-filter_dark.svg" height="13px" class="md-2" alt="icon" *ngIf="isDarkTheme" />
+        FILTER
+    </button>
+
+    <mat-chip-list #chipList aria-label="Fruit selection" class="filterchip">
+        <div *ngFor="let selectedFilter of SelectedfilterValue | keyvalue; let i=index">
+            <mat-chip *ngIf="selectedFilter.value != undefined &&
+                 selectedFilter.value != 'undefined-undefined' && selectedFilter.value!='' && 
+                 selectedFilter.value!= null && selectedFilter.value!= '[object Object]'"
+                class="mat-chip-class matchip mat-chip-white">
+                <span>
+                    {{selectedFilter.key}}: {{selectedFilter.value}}
+                </span>
+                <mat-icon matChipRemove class="mat-icon-chip-class maticon" (click)="removeFilter(selectedFilter.key)">
+                    close
+                </mat-icon>
+            </mat-chip>
+        </div>
+    </mat-chip-list>
+
+    <div class="filter_open" *ngIf="isOpen" [ngStyle]="componentName !='scheduler' &&
+     componentName !='schedulerFinal' 
+     && componentName !='Final'  && componentName !='planning' ? {'width': '400px'} : 
+     (componentName =='scheduler' || componentName =='schedulerFinal' 
+     || componentName =='Final') ?  {'width': '783px'} : (componentName =='Metrics') ?
+      {'width': '600px'}: {}">
+        <div class="row">
+
+            <div class="col-lg-4" [hidden]="((componentName=='LaserMd') || 
+                (componentName=='Proto') || (componentName=='MasterData') ||  (componentName=='Metrics') || 
+                (componentName=='planning'))">
+                <mat-form-field appearance="legacy" class="no-border w-100">
+                    <mat-label>Job Number</mat-label>
+                    <input matInput placeholder="Job Number" formControlName="jobNumber">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4" [hidden]="componentName=='planning' || componentName=='Metrics' 
+            ">
+                <mat-form-field appearance="legacy" class="no-border w-100">
+                    <mat-label>CES Part#</mat-label>
+                    <input matInput placeholder="CES part#" formControlName="ces_part_rolledbody">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4" *ngIf="componentName=='planning'">
+                <mat-form-field appearance="legacy" class="no-border w-100">
+                    <mat-label>Component</mat-label>
+                    <input matInput placeholder="Component" formControlName="comp_number">
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-4" [ngStyle]="(componentName =='Metrics') ?  {'width': '583px'} : {}"
+                [hidden]="((componentName=='LaserMd') || (componentName=='Proto') || (componentName=='MasterData'))">
+                <mat-form-field appearance="legacy" class="no-border example-form-field calender-input w-100">
+                    <mat-label> Run date </mat-label>
+                    <mat-date-range-input [rangePicker]="picker" class="no-border " id="my-date-picker"
+                        [max]="componentName =='Metrics' ? minDate :  'null'">
+                        <input matStartDate formControlName="start_date" placeholder="Start date" class="no-border">
+                        <input matEndDate formControlName="end_date" placeholder="End date" class="no-border">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-lg-3" *ngIf="componentName=='Final'">
+                <mat-form-field appearance="legacy" class="no-border">
+                    <mat-label>Job Status</mat-label>
+
+                    <mat-select #matSelect='matSelect' formControlName="jobstatus_id"
+                        (change)="selectChangeHandler($event)">
+                        <mat-select-trigger style="display: flex; align-items: center;">
+                            <mat-icon [ngStyle]="{ color : (f.jobstatus_id.value && f.jobstatus_id.value && 
+                                f.jobstatus_id.value['status_color']) ? 
+                            f.jobstatus_id.value['status_color'] : null}">
+                                fiber_manual_record
+                            </mat-icon>
+                            {{(f.jobstatus_id.value && f.jobstatus_id.value['status_name']) ?
+                            f.jobstatus_id.value['status_name'] : null}}
+                        </mat-select-trigger>
+
+                        <mat-option *ngFor="let drive of jobStatusDropdown" [value]="drive">
+                            <mat-icon [ngStyle]="{ color : drive.status_color}">
+                                fiber_manual_record
+                            </mat-icon>
+                            {{drive.status_name}}
+                        </mat-option>
+                    </mat-select>
+
+                </mat-form-field>
+            </div>
+
+            <div class="col-12">
+                <div class="text-end">
+                    <button mat-button color="warn" class="ms-2" (click)="resetForm() ;">Clear</button>
+                    <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                        (click)="ApplyFliter();">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

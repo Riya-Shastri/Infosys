@@ -1,0 +1,99 @@
+ul li{
+    list-style: none;
+}
+
+.file-align{
+    margin-bottom: 20px;
+}
+.file-align ul {
+padding-right: 10px;
+}
+.progressBarDiv{
+    margin-top:14px;
+}
+
+textarea#styled {
+    width: 88%;
+    height: 100px;
+    border: 3px solid;
+    border-color:  #cccccc;
+    padding: 5px;
+    text-align: center;
+    font-weight: 600;
+    display: flex;
+}
+
+::ng-deep .ngx-file-drop__drop-zone {
+    background: #EAF7FF 0% 0% no-repeat padding-box;
+    border: 1px dashed #005587;
+    border-radius: 10px;
+    opacity: 1;
+    height: 43px!important;
+}
+
+ .click_close{
+    position: absolute;     
+    bottom: 2px;
+    right: 1px;
+    font-size: 15px;
+    cursor: pointer;
+}
+.attached_files img{
+    max-width: 20px;
+    max-height: 20px;
+}
+.fileup{
+    margin-bottom: 10px;
+}
+
+.fileuploadtitle{
+    text-align: left;
+font-size: 18px;
+font-weight: 600;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+
+}
+.uploadbuttons{
+    margin-left: 170px;
+    margin-top: 10px;
+}
+
+.attached_files{
+    height: 38px; background-color:#f4faee;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+    box-shadow: 0px 1px 2px rgb(0 0 0 / 10%);
+}
+
+.error{
+    color: #DA291C;
+}
+
+.center-load {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.overlay {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
+    height: 100vh;
+    width: 100%;
+    background-color: rgba(74, 74, 74, .8);
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+

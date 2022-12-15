@@ -1,0 +1,130 @@
+<div class="material">
+    <div>
+        <mat-icon  mat-dialog-close style="cursor: pointer; margin-left: 97%;">close</mat-icon>
+    </div>
+    <div class="short">
+        <div class="mats">
+            <div class=" row mt-2">   
+                <label class="fw-bold mb-2">Materials Short Information</label>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <form>
+                        <div class="table-container-mat">
+                            <table mat-table [dataSource]="dataSource" #myTable class="border cal_input_table mat-elevation-z8"
+                            aria-describedby="material">
+
+                            <ng-container *ngFor="let column of columns; ">
+
+                                <ng-container>
+
+                                    <ng-container  [matColumnDef]="column.columnDef">
+                                        <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                            {{column.header}}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element ; let i = index;">
+                                                <div>
+                                                    <span *ngIf="column.columnDef =='message'" class="mat-message"
+                                                            [matTooltip]="element['message']">
+                                                                {{element[column.columnDef]}}
+                                                    </span> 
+                                                    <span *ngIf="column.columnDef !== 'mat_qty_short_ud' && column.columnDef !== 'message'">
+                                                        {{element[column.columnDef]}}
+                                                    </span> 
+                                                    <span *ngIf="column.columnDef === 'mat_qty_short_ud'">
+                                                        {{element[column.columnDef] | date: 'MM-dd-yyyy HH:mm:ss'}}
+                                                    </span>  
+                                                </div>
+                                            </td>
+                                    </ng-container>
+                                    
+                                </ng-container>
+
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="tableColumns; sticky :true"></tr>
+                            <tr mat-row *matRowDef="let element; let i = index; columns: tableColumns;">
+                            </tr>
+
+                            </table>
+                            <ng-container *ngIf="dataSource?.length == 0">
+                                    <span class="m-5" style="display: block; text-align: center;">
+                                        No Records Found
+                                    </span>
+                            </ng-container>
+                        </div>  
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <div class="mats">
+            <div class="d-flex justify-content-between mt-2">
+                <div>    
+                    <label class="fw-bold mb-2">Add Comment</label>
+                </div>
+                <div (click)="saveComment()">
+                    <img src="assets/SVG/save-comment.svg" alt="icon" style="cursor: pointer;">
+                </div>
+            </div>
+            <div>
+                <textarea class="textArea"  [(ngModel)]="newComment" id="comment">
+                </textarea>
+            </div>
+            <div class="row mt-2">
+                    
+                <div class="col-12">
+                    <div>    
+                        <label class="fw-bold mb-2">Comments</label>
+                    </div>
+                    <form class="tabAdd">
+                        <div class="table-container-comment ">
+                                        <table mat-table [dataSource]="dataSource2" #myTable class="border cal_input_table mat-elevation-z8"
+                                        aria-describedby="comment">
+
+                                        <ng-container *ngFor="let column of columns2; ">
+
+                                            <ng-container>
+
+                                                <ng-container  [matColumnDef]="column.columnDef">
+                                                    <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                                        {{column.header}}
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let element ; let i = index;">
+                                                            <div>
+                                                                <span *ngIf="column.columnDef =='user_comments'" class="mat-Comment"
+                                                                [matTooltip]="element['user_comments']">
+                                                                        {{element[column.columnDef]}}
+                                                                </span> 
+                                                                <span *ngIf="column.columnDef !=='created_date' && column.columnDef !== 'user_comments'">
+                                                                    {{element[column.columnDef]}}
+                                                                </span> 
+                                                                <span *ngIf="column.columnDef ==='created_date'">
+                                                                    {{element[column.columnDef] | date: 'MM-dd-yyyy HH:mm:ss'}}
+                                                                </span>  
+                                                            </div>
+                                                        </td>
+                                                </ng-container>
+                                                
+                                            </ng-container>
+
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="tableColumns2; sticky :true"></tr>
+                                        <tr mat-row *matRowDef="let element; let i = index; columns: tableColumns2;">
+                                        </tr>
+
+                                        </table>
+                                        <ng-container *ngIf="dataSource2?.length == 0">
+                                                <span class="m-5" style="display: block; text-align: center;">
+                                                    No Records Found
+                                                </span>
+                                        </ng-container>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

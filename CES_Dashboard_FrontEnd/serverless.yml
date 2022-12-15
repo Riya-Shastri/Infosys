@@ -1,0 +1,201 @@
+service: ces-mfg-dashboard-frontend  #NOTE: update this with your project service name (i.e. project name)
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region:  ${opt:region, self:custom.secrets.AWS_REGION}
+  stage: ${opt:stage, self:custom.secrets.ENV}
+  cfnRole: ${opt:cfnRoleArn} #Un-comment this line if project is deployed through AWS Codepipeline
+  deploymentBucket:
+    name: ${self:custom.secrets.DEPLOYMENT_ARTIFACT}
+    maxPreviousDeploymentArtifacts: 10
+    blockPublicAccess: true
+    serverSideEncryption: AES256
+
+plugins:
+  - serverless-scriptable-plugin
+  - serverless-s3-sync
+  - serverless-cloudfront-invalidate #add as the last plugin
+
+custom:
+  scriptable:
+    hooks:
+      before:package:initialize: 
+        - npm run build:${self:provider.stage}
+      after:package:finalize:
+        #NOTE: Frontend folder name is other than 'app' than please replace 'app' with current frontend folder name in below line
+        - npm run copy "app/${self:custom.secrets.BUILD_FOLDER_NAME}/**/*" ${self:custom.localArtifactDir}
+        - npm run zip --source=${self:custom.secrets.BUILD_FOLDER_NAME}/* --package=${self:custom.localArtifactDir}
+  s3Bucket: ${self:custom.secrets.FE_Bucket_NAME}
+  localArtifactDir: ${opt:package, '.serverless'}
+  s3Sync:
+    buckets:
+      # Copying static assets to the project frontend code bucket
+      - bucketNameKey: WebAppS3BucketName # required
+        localDir: ${self:custom.localArtifactDir}/${self:custom.secrets.BUILD_FOLDER_NAME} # required
+      # Copying frontend build zip file to the serverless deployment bucket for recovery purpose
+      - bucketNameKey: ServerlessDeploymentBucketName # required
+        bucketPrefix: UI-Code/ # optional
+        localDir: ${self:custom.localArtifactDir}/ui-build # required
+  cloudfrontInvalidate:
+    - distributionIdKey: "CloudFrontDistributionId" #conditional, distributionId or distributionIdKey is required.
+      autoInvalidate: true
+      items: # one or more paths required
+        - "/*"
+        - "/**"
+  secrets: ${file(secrets.${opt:stage,'dev'}.yml)}
+  stackTags: #Please update the tags as per the project
+    App Name: CES mfg dashboard #Project Name
+    appid: 32534
+    bu: 'ces' #Business Unit
+    bc: '763' #Project BC
+    rc: 'A15' #Project RC
+    techowner: 'mr277' #Project business lead/owner WWID
+    billingowner: 'op633' #Project owner WWID
+    environment: ${self:provider.stage}
+    datedeployed: 06012022
+
+resources:
+  Resources:
+    WebAppS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.s3Bucket}
+        # PublicAccessBlockConfiguration:
+        #   BlockPublicAcls       : true
+        #   BlockPublicPolicy     : true
+        #   IgnorePublicAcls      : true
+        #   RestrictPublicBuckets : true
+        BucketEncryption:
+          ServerSideEncryptionConfiguration: 
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - ${self:custom.secrets.CORS_DOMAIN}
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+      DeletionPolicy: Retain
+
+    WebAppS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: WebAppS3Bucket
+        PolicyDocument:
+          Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal:
+                CanonicalUser: !GetAtt TheCloudFrontOriginAccessIdentity.S3CanonicalUserId
+            Action: s3:GetObject
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebAppS3Bucket', /*]]
+    
+    TheCloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: !Sub 'CloudFront OAI for ${self:custom.s3Bucket}'
+
+    WebAppCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      DependsOn:
+      - WebAppS3Bucket
+      Properties:
+        DistributionConfig:
+          Comment: Cloudfront Distribution pointing to S3 bucket
+          #Un-Comment below lines of code if you have domain name like <sub-domain>.cummins.com for cloudfront
+          Aliases:
+            - ${self:custom.secrets.DOMAIN_NAME}
+          Origins:
+            - DomainName: 
+                !Join [ "", [ !Ref WebAppS3Bucket,".s3.","${self:provider.region}",".amazonaws.com" ] ]
+              Id: S3Origin
+              S3OriginConfig:
+                OriginAccessIdentity:
+                  !Join [ "", [ "origin-access-identity/cloudfront/", !Ref TheCloudFrontOriginAccessIdentity ] ]
+          Enabled: 'true'
+          HttpVersion: 'http2'
+          DefaultRootObject: index.html
+          CustomErrorResponses:
+            - ErrorCachingMinTTL: 300
+              ErrorCode: 403
+              ResponseCode: 400
+              ResponsePagePath: '/index.html'
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - GET
+              - HEAD
+            Compress: true
+            TargetOriginId: S3Origin
+            ForwardedValues:
+              QueryString: 'false'
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+            FunctionAssociations:
+              - EventType: viewer-response
+                FunctionARN: !GetAtt CloudfrontFunction.FunctionMetadata.FunctionARN
+          #Un-Comment below lines of code when you want to enable cloudfront logging for the project 
+          Logging:
+            Bucket: !Join ["", [ !Ref WebAppS3Bucket, ".s3.amazonaws.com" ] ]
+            IncludeCookies: false
+            Prefix: 'cloudfrontlogs'
+          IPV6Enabled: true          
+          PriceClass: PriceClass_All
+          ViewerCertificate:
+            #CloudFrontDefaultCertificate: 'true' # Comment this line and un-comment below lines when domain is available for the project.
+            AcmCertificateArn: ${self:custom.secrets.CERTIFICATE_ARN}
+            MinimumProtocolVersion: TLSv1.2_2021
+            SslSupportMethod: sni-only
+    
+    CloudfrontFunction:
+      Type: AWS::CloudFront::Function
+      Properties:
+        AutoPublish: true
+        FunctionCode: !Sub |
+          function handler(event) {
+              var response = event.response;
+              var headers = response.headers;
+              
+              // Set HTTP security headers
+              // Since JavaScript doesn't allow for hyphens in variable names, we use the dict["key"] notation 
+              headers['access-control-allow-headers'] = {value: 'Content-Type'};
+              headers['strict-transport-security'] = {value: 'max-age=31536000; includeSubdomains; preload'}; 
+              headers['content-security-policy'] = {value: "${self:custom.secrets.content-security-policy}"}; 
+              headers['x-content-type-options'] = {value: 'nosniff'}; 
+              headers['x-frame-options'] = {value: 'DENY'}; 
+              headers['x-xss-protection'] = {value: '1; mode=block'};
+              headers['referrer-policy'] = {value: 'same-origin'};
+              headers['cache-control'] = {value: 'no-store,max-age=0,must-revalidate'};
+              headers['pragma'] = {value: 'no-cache'};              
+              // Return the response to viewers 
+              return response;
+          }
+        FunctionConfig:
+          Comment: !Sub 'CF-Function for Viewer Response'
+          Runtime: cloudfront-js-1.0
+        Name: !Sub "${self:service}-CloudfrontFunction"
+
+  ## In order to print out the hosted domain via `serverless info` we need to define the DomainName output for CloudFormation
+  Outputs:
+    WebAppS3BucketName:
+      Value: !Ref 'WebAppS3Bucket'
+      Description: Name of S3 bucket to hold website content
+    WebAppCloudFrontDistributionOutput:
+      Value: 
+        'Fn::GetAtt': [ WebAppCloudFrontDistribution, DomainName ]
+      Description: Endpoint for Cloudfront distribution
+    CloudFrontDistributionId:
+      Description: Cloudfront distribution id.
+      Value:
+        Ref: WebAppCloudFrontDistribution

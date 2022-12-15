@@ -1,0 +1,199 @@
+<mat-dialog-content class="mat-typography">
+    <div class="add-container">
+        <form [formGroup]="laserRecipeForm">
+            <div class="addLaserMd">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">CES Part No.(Rolled Body)</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput type="text" placeholder="CES Part No.(Rolled Body)"
+                                    id="ces_part_rolledbody" formControlName="ces_part_rolledbody" *ngIf="isEditPage"
+                                    readonly style="color: #857c7c;">
+                                <input matInput type="text" placeholder="CES Part No.(Rolled Body)"
+                                    id="ces_part_rolledbody" formControlName="ces_part_rolledbody" *ngIf="!isEditPage">
+                            </mat-form-field>     
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">CES Part No.(Flat)</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput type="text" placeholder="CES Part No. (Flat)" id="ces_part_flat"
+                                    formControlName="ces_part_flat">
+                            </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Diameter</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput formControlName="diameter" placeholder="Diameter" id="diameter"
+                                    type="number" min="0">
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Length</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput formControlName="length" placeholder="Length" id="length" type="number"
+                                    min="0">
+                            </mat-form-field>    
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Material Gauge of the Flat</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput formControlName="mat_gauge_flat"
+                                    placeholder="Material Gauge of the Flat" id="mat_Gauge_Flat" type="text">
+                            </mat-form-field>
+                         </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Cut</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="cut">
+                                    <mat-option value="">Select Cut</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                         </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Stamp</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="stamp">
+                                    <mat-option value="">Select Stamp</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Flare Pierce Gauge</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="flare_pierce_gauge">
+                                    <mat-option value="">Select Flare Pierce Gauge</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownFPG; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Manual Roll</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="manual_roll">
+                                    <mat-option value="">Select Manual Roll</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Weld</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="weld">
+                                    <mat-option value="">Select Weld</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                         </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Coin</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="coin">
+                                    <mat-option value="">Select Coin</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                         </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Lucas</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="lucas">
+                                    <mat-option value="">Select Lucas</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                         </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Run Cell</label>
+                        <div>
+                            <mat-form-field appearance="outline" class="no-border w-100">
+                                <input matInput formControlName="runcell" placeholder="Run Cell" 
+                                id="runcell" type="text">
+                            </mat-form-field>    
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label class="fw-bold mb-2">Sized</label>
+                        <div>
+                            <mat-form-field class="w-100">
+                                <mat-select #matSelect='matSelect' formControlName="sized">
+                                    <mat-option value="">Select Sized</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">
+                                        {{line}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                         </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-end">
+                            <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                                (click)="dialogCancel()">Cancel</button>
+                            <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                                (click)="saveLaserRecipeData(laserRecipeForm.valid)" *ngIf="!isEditPage">Add
+                                Data</button>
+                            <button type="submit" mat-raised-button color="warn" *ngIf="isEditPage"
+                                (click)="saveLaserRecipeData(laserRecipeForm.valid)" class="ms-2 rounded-pill">
+                                Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>

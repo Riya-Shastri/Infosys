@@ -1,0 +1,24 @@
+<div class="mt-2">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h2>Recipe Master</h2>
+        </div>
+    </div>
+    <div class="position-relative d-flex align-items-center justify-content-between">
+        <app-filter (filterData)="filterData($event)" [componentName]="'MasterData'">
+        </app-filter>
+        <div>
+            <img matTooltip="Download Template" src="assets/SVG/download.svg" alt="Download Template" class="mx-3"
+                style="cursor: pointer;" (click)="downloadExcel()">
+            <img matTooltip="Upload" src="assets/SVG/upload.svg" alt="Upload" class="mx-3" style="cursor: pointer;"
+                (click)="openFileUpload()">
+            <img matTooltip="Add" src="assets/SVG/addData.svg" alt="add" class="mx-3" style="cursor: pointer;"
+                (click)="openDialog()">
+        </div>
+    </div>
+    <app-master-common-table (deleteData)="deleteRecipeData($event)" (dataSort)="sortMasterDataChange($event)"
+        [totalRecords]="totalRecords" [currentPageSize]="currentPageSize" [columns]="columns" [dataset]="dataSource"
+        [componentName]="'MasterData'" (emitPagesValue)="emitPagesValue($event)"
+        [defaultShortKey]="{ id: 'last_updated_date', start: 'desc'}">
+    </app-master-common-table>
+</div>

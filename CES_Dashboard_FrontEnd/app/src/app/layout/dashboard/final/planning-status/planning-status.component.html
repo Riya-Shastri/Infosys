@@ -1,0 +1,61 @@
+<div class="planning">
+    <div>
+        <mat-icon  mat-dialog-close style="cursor: pointer; margin-left: 97.5%;">close</mat-icon>
+    </div>
+    
+    <div class="row mt-2">   
+        <label class="fw-bold mb-2">Planning Short Information</label>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            <form>
+                <div class="table-container">
+                    <table mat-table [dataSource]="dataSource" #myTable class="border cal_input_table mat-elevation-z8"
+                    aria-describedby="planningTable">
+
+                    <ng-container *ngFor="let column of columns; ">
+
+                        <ng-container>
+
+                            <ng-container  [matColumnDef]="column.columnDef">
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                    {{column.header}}
+                                </th>
+                                <td mat-cell *matCellDef="let element ; let i = index;">
+                                        <div>
+                                            <span *ngIf="column.columnDef == 'plan_user_comments'"  class="plan-Comment" [matTooltipPosition]="'below'"
+                                                  [matTooltip]="element['plan_user_comments']">
+                                                     {{element[column.columnDef]}}
+                                            </span> 
+                                            
+                                            <span *ngIf="column.columnDef !== 'plan_qty_short_ud' && column.columnDef !=='plan_user_comments_ud' && column.columnDef !=='plan_user_comments'">
+                                                {{element[column.columnDef]}}
+                                            </span> 
+                                            <span *ngIf="column.columnDef === 'plan_qty_short_ud' || column.columnDef ==='plan_user_comments_ud'">
+                                                {{element[column.columnDef] | date: 'MM-dd-yyyy HH:mm:ss'}}
+                                            </span>  
+                                        </div>
+                                    </td>
+                            </ng-container>
+                            
+                        </ng-container>
+
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="tableColumns; sticky :true"></tr>
+                    <tr mat-row *matRowDef="let element; let i = index; columns: tableColumns;">
+                    </tr>
+
+                    </table>
+                    <ng-container *ngIf="dataSource?.length == 0">
+                            <span class="m-5" style="display: block; text-align: center;">
+                                No Records Found
+                            </span>
+                    </ng-container>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>

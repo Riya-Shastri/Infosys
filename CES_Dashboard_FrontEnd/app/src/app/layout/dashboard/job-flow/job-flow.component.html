@@ -1,0 +1,88 @@
+<div class="items" *ngIf="job['parent']['multiparent'][0]['line_name'] !== 'C-500' 
+    && job['parent']['multiparent'][0]['line_name'] !== 'C-700'">
+    <mat-icon mat-dialog-close style="cursor: pointer; margin-left: 97%;">close</mat-icon>
+    <ul class="spaceBottom">
+        <li class="">   
+            <a class="node multi" *ngFor="let multiparent of job['parent']['multiparent']" >
+                    <div [ngStyle]="{ 'background-color' : multiparent.color }"
+                    [ngClass]="multiparent.deletedClass == 'Y' ?  multiparent.deletedClass : '' ">
+                        <p>{{multiparent.line_name}}</p>
+                        <p>{{multiparent.job_number}}</p>
+                        <p> {{multiparent.ces_part}}</p>
+                        <p>{{multiparent.schd_qty}}</p>
+                    </div>
+            </a>
+            <ul *ngIf="job['parent']['child'].length > 0">
+                <li *ngFor="let child of job['parent']['child']" class="makeChild">
+                    <a class="node multi">
+                        <div [ngStyle]="{ 'background-color' : child.color }" 
+                        [ngClass]="child.deletedClass == 'Y' ?  child.deletedClass : '' ">
+                            <p>{{child.line_name}}</p>
+                            <p>{{child.job_number}}</p>
+                            <p>{{child.ces_part}}</p>
+                            <p>{{child.schd_qty}}</p>
+                        </div>
+                    </a>                                                     
+                    <ul *ngIf="child['grandChild'].length > 0">
+                        <li *ngFor="let grandChild of child['grandChild']">                            
+                            <a class="node multi">   
+                                <div  [ngStyle]="{ 'background-color' : grandChild.color }"
+                                [ngClass]="grandChild.deletedClass == 'Y' ? grandChild.deletedClass : '' ">                             
+                                    <p>{{grandChild.line_name}}</p>
+                                    <p>{{grandChild.job_number}}</p>
+                                    <p>{{grandChild.ces_part}}</p>
+                                    <p>{{grandChild.schd_qty}}</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div class="items" *ngIf="job['parent']['multiparent'][0]['line_name'] == 'C-500' 
+    || job['parent']['multiparent'][0]['line_name'] == 'C-700'" >
+    <mat-icon mat-dialog-close style="cursor: pointer; margin-left: 97%; margin-bottom: 3%">close</mat-icon>
+    <ul class="spaceBottom rotate">
+        <li class="">      
+            <a class="node multi rotate" *ngFor="let multiparent of job['parent']['multiparent']" >
+                    <div [ngStyle]="{ 'background-color' : multiparent.color }"
+                    [ngClass]="multiparent.deletedClass == 'parent' ?  multiparent.deletedClass : '' ">
+                        <p>{{multiparent.line_name}}</p>
+                        <p>{{multiparent.job_number}}</p>
+                        <p> {{multiparent.ces_part}}</p>
+                        <p>{{multiparent.schd_qty}}</p>
+                    </div>
+                </a>
+            <ul *ngIf="job['parent']['child'].length > 0">
+                <li *ngFor="let child of job['parent']['child']" class="makeChild">
+                    <a class="node multi rotate">
+                        <div [ngStyle]="{ 'background-color' : child.color }" 
+                        [ngClass]="child.deletedClass == 'parent' ?  child.deletedClass : '' ">
+                            <p>{{child.line_name}}</p>
+                            <p>{{child.job_number}}</p>
+                            <p>{{child.ces_part}}</p>
+                            <p>{{child.schd_qty}}</p>
+                        </div>
+                    </a>                         
+                    <ul *ngIf="child['grandChild'].length > 0">
+                        <li *ngFor="let grandChild of child['grandChild']">                            
+                            <a class="node multi rotate">   
+                                <div  [ngStyle]="{ 'background-color' : grandChild.color }"
+                                [ngClass]="grandChild.deletedClass == 'parent' ? grandChild.deletedClass : '' ">                             
+                                <p>{{grandChild.line_name}}</p>
+                                <p>{{grandChild.job_number}}</p>
+                                <p>{{grandChild.ces_part}}</p>
+                                <p>{{grandChild.schd_qty}}</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+

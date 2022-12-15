@@ -1,0 +1,46 @@
+#foot {
+    width: 100%;
+    min-height: 30px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.CMI-globalFooter {
+    position: fixed !important;
+    z-index: 9999;
+    width: 100%;
+    color: #fff;
+    bottom: 0;
+    background: #000000 0% 0% no-repeat padding-box;
+    opacity: 1;
+    padding: 8px 0px;
+}
+
+
+.bottom-footer{
+    width: 100%;
+    margin: 0 auto;
+    padding: 0px 25px;
+}
+
+.privacy{
+    color:white; text-decoration: none; font-size: 14px;
+}
+
+@media (max-width: 803px)
+{
+    .CMI-globalFooter 
+        {
+            background: #000;
+            width: 100%;
+            color: #fff;
+        }
+}
+
+@media (max-width: 767px){
+    .CMI-globalFooter {
+        text-align: center;
+    }
+}
+

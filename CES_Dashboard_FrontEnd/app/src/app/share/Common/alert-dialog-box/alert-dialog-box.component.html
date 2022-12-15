@@ -1,0 +1,88 @@
+<div mat-dialog-title style="float: right; margin-bottom: 5px; margin-top: 55px;">
+    <div mat-dialog-actions style="min-height:0px !important; position: relative;" *ngIf="data.type!='Export'">
+        <mat-icon style="color:#ACACAC;cursor:pointer; position: absolute; top: -70px; right: -11px;"
+            (click)="onOkClick()">clear
+        </mat-icon>
+    </div>
+</div>
+<div *ngIf="data.title=='Error'"
+    style="margin-top: 55px;font-family: 'Helvetica Neue', sans-serif !important;margin-right: 10px;">
+    <mat-icon class="alert-mat-icon">cancel</mat-icon>
+</div>
+<div *ngIf="data.title=='Success'"
+    style="margin-top: 55px;font-family: 'Helvetica Neue', sans-serif !important;margin-right: 10px;">
+    <mat-icon class="alert-mat-icon">check_circle</mat-icon>
+    <div style="margin-left:143px;font-size: 20px;"><strong>Success</strong></div>
+    <br>
+</div>
+<div *ngIf="data.title=='Warning'"
+    style="margin-top: 55px;font-family: 'Helvetica Neue', sans-serif !important;margin-right: 10px;">
+    <mat-icon class="alert-mat-icon">warning</mat-icon>
+    <div style="margin-left:143px;font-size: 20px;"><strong>Warning</strong></div>
+    <br>
+</div>
+<div *ngIf="data.title=='Confirm'" style="font-family: 'Helvetica Neue', sans-serif !important;
+text-align: center;">
+    <mat-icon class="alert-mat-icon-conf">help</mat-icon>
+    <div class="confirmpopup"><strong>Confirm</strong></div>
+    <br>
+</div>
+<div *ngIf="data.title=='ConfirmDelete'" style="font-family: 'Helvetica Neue', sans-serif !important;
+text-align: center;">
+    <mat-icon class="alert-mat-icon-conf">help</mat-icon>
+    <div class="confirmpopup"><strong>Confirm</strong></div>
+    <br>
+</div>
+<div *ngIf="data.title=='Success_AR'" style="margin-top: 55px;font-family: 'Helvetica Neue', sans-serif !important;">
+    <mat-icon class="alert-mat-icon">check_circle</mat-icon>
+    <div style="margin-left:90px;font-size: 18px;"><strong>Successfully Approved</strong></div>
+    <br>
+</div>
+<div *ngIf="content" mat-dialog-content
+    style="text-align: center; font-size: 15px; font-family: 'Helvetica Neue', sans-serif !important; font-weight: 500;"
+    [innerHTML]="content">
+
+</div>
+<div class="scroll ali" *ngIf="data.tableData && data.tableData?.action && data.tableData?.action == 'Update'">
+    <span *ngIf="data.tableData?.successArray?.length >0">
+        <h3 style="color: green;">
+            Success
+        </h3>
+    </span>
+    <span *ngIf="data.tableData?.failureArray?.length >0">
+        <h3 style="color: red;">
+            Error
+        </h3>
+    </span>
+</div>
+
+<div mat-dialog-actions *ngIf="(data.type!=='INFO') && (data.type !=='Export') && (data.type !=='Remove') && (data.type !=='DELETE')"
+    style="float: right;margin-top: 15px;font-family: 'Helvetica Neue', sans-serif !important;">
+    <button mat-stroked-button style="margin-right: 10px;" class="cancelButton rounded-pill"
+        mat-dialog-close>Cancel</button>
+    <button type="button" mat-raised-button class="confirmButton rounded-pill" mat-dialog-close="Yes" cdkFocusInitial
+        tabindex="1">OK</button>
+</div>
+<div mat-dialog-actions *ngIf="(data.type=='DELETE')&&(data.type!=='INFO') && (data.type !=='Export') && (data.type !=='Remove')"
+    style="float: right;margin-top: 15px;font-family: 'Helvetica Neue', sans-serif !important;">
+    <button mat-stroked-button style="margin-right: 10px;" class="cancelButton rounded-pill" mat-dialog-close="Recreate" cdkFocusInitial
+        >Re-Create</button>
+        <button mat-stroked-button style="margin-right: 10px;" class="cancelButton rounded-pill"
+        mat-dialog-close>Cancel</button>
+    <button type="button" mat-raised-button class="confirmButton rounded-pill" mat-dialog-close="Yes" cdkFocusInitial
+        tabindex="1">OK</button>
+</div>
+<div mat-dialog-actions *ngIf="(data.type!=='INFO') && (data.type=='Export')&& (data.type !=='DELETE')"
+    style="text-align: center; width: 100%; display: block; margin-top: 15px; font-family: 'Helvetica Neue', sans-serif !important;">
+    <button type="button" mat-raised-button color="secondary" mat-dialog-close="OK" cdkFocusInitial
+        tabindex="1">OK</button>
+</div>
+
+<div mat-dialog-actions *ngIf="(data.type!=='INFO') && (data.type!=='Export') && (data.type=='Remove')&& (data.type !=='DELETE')"
+    style="text-align: center; width: 100%; display: block; margin-top: 15px; font-family: 'Helvetica Neue', sans-serif !important;">
+    <button type="button" mat-raised-button color="secondary" mat-dialog-close="No" cdkFocusInitial
+        tabindex="1">No</button>
+    &nbsp;
+    <button type="button" mat-raised-button color="primary" mat-dialog-close="Remove" cdkFocusInitial
+        tabindex="1">Confirm</button>
+</div>

@@ -1,0 +1,245 @@
+<mat-dialog-content >
+    <div class="add-container">
+        <form [formGroup]="addRecipeMasterForm">
+            <div class="addLaserMd">             
+                <div class="row">                        
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">CES Part No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="cespart_no" type="text" style="color: #857c7c;"
+                                    placeholder="CES Part No." id="cespart_no" *ngIf="isEditPage" readonly>
+                                    <input matInput formControlName="cespart_no" type="text"
+                                    placeholder="CES Part No." id="cespart_no" *ngIf="!isEditPage">
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">CES Base Part No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">
+                                    <input matInput type="text" formControlName="ces_base_part"
+                                            placeholder="CES Base Part No." id="ces_base_part">
+                                </mat-form-field>   
+                             </div>            
+                        </div>
+                         <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Style No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">
+                                    <input matInput type="number" formControlName="style_no"
+                                            placeholder="Style No." id="style_no" min="0">
+                                </mat-form-field>   
+                             </div>            
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Assembly Type</label>
+                            <div>
+                                <mat-form-field class="w-100">                                    
+                                    <mat-select #matSelect="matSelect" formControlName="assembly_type">
+                                        <mat-option value="">Select Assembly Type</mat-option>
+                                        <mat-option [value]="line" class="custum-select" *ngFor="let line of assemplyDropDown; let i = index">
+                                            {{line}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Diameter(TLA Level)</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="diameter"
+                                    placeholder="Diameter(TLA Level)" id="diameter" type="number" min="0">
+                                </mat-form-field>  
+                            </div>             
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Length</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="length"
+                                    placeholder="Length"  id="length"  type="number" min="0">
+                                </mat-form-field>
+                            </div>               
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Inlet Part No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="inlet_part"
+                                    placeholder="Inlet Part No."  type="text" id="inlet_part">
+                                </mat-form-field>  
+                            </div>             
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Outlet Part No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="outlet_part"
+                                    placeholder="Outlet Part No."   id="outlet_part" type="text">
+                                </mat-form-field>    
+                            </div>           
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Filter Part No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="filter_part"
+                                    placeholder="Filter Part No."   id="filter_part" type="text">
+                                </mat-form-field>   
+                            </div>            
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Mixer Part No.</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="mixer_part"
+                                    placeholder="Mixer Part No."  id="mixer_part" type="text">
+                                </mat-form-field>       
+                            </div>        
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Catmod No.(Single Body)</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="catmod_no"
+                                    placeholder="Catmod No.(Single Body)"   id="catmod_no" type="text">
+                                </mat-form-field>   
+                            </div>            
+                        </div> 
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Inlet-Catmod</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="inlet_catmod"
+                                    placeholder="Inlet-Catmod"   id="inlet_catmod" type="text">
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Canning Diameter(Inlet)</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="canning_diameter_inlet" type="text"
+                                    placeholder="Canning Diameter(Inlet)"  id="canning_diameter_inlet">
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Outlet-Catmod</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="outlet_catmod"
+                                    placeholder="Outlet-Catmod" id="outlet_catmod" type="text">
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Canning Diameter(Outlet)</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="canning_diameter_outlet"
+                                    placeholder="Canning Diameter(Outlet)" id="canning_diameter_outlet" type="text">
+                                </mat-form-field>
+                            </div>               
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Filter-Catmod</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="filter_catmod"
+                                    placeholder="Filter-Catmod"  id="filter_catmod" type="text">
+                                </mat-form-field>  
+                            </div>             
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Canning Diameter(Dpf)</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="canning_diameter_filter" type="text"
+                                    placeholder="Canning Diameter(Dpf)"  id="canning_diameter_filter">
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">FG Rack</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                
+                                    <input matInput formControlName="fg_rack"
+                                        placeholder="FG Rack"  id="fg_rack" type="text">
+                                </mat-form-field> 
+                            </div>             
+                        </div> 
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Audit</label>
+                            <div>
+                                <mat-form-field class="w-100">                                    
+                                    <mat-select #matSelect='matSelect' formControlName="audit">
+                                    <mat-option value="">Select Audit</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of auditDropDown; let i = index"
+                                        [value]="line">  {{line}}   </mat-option>
+                                            </mat-select>
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Size</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                   <input matInput formControlName="size"
+                                    placeholder="Size"  id="fg_rack" type="text">
+                                </mat-form-field> 
+                            </div>               
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Build Slot</label>
+                            <div>
+                                <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                    <input matInput formControlName="build_slot"
+                                    placeholder="Build Slot"  id="build_slot">
+                                </mat-form-field>     
+                            </div>          
+                        </div> 
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Steering Wheel</label>
+                            <div>
+                                <mat-form-field class="w-100">                                    
+                                    <mat-select #matSelect='matSelect' formControlName="steering_wheel">
+                                    <mat-option value="">Select Steering Wheel</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">  {{line}}   </mat-option>
+                                            </mat-select>
+                                </mat-form-field> 
+                            </div>              
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="fw-bold mb-2">Water Dam</label>
+                            <div>
+                                <mat-form-field class="w-100">                                    
+                                    <mat-select #matSelect='matSelect' formControlName="water_dam">
+                                    <mat-option value="">Select Water Dam</mat-option>
+                                    <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                        [value]="line">  {{line}}   </mat-option>
+                                            </mat-select>
+                                </mat-form-field> 
+                            </div>              
+                        </div>                                
+                        <div class="col-12">
+                                <div class="text-end">
+                                        <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                                        (click)="dialogCancel()">Cancel</button>
+                                    <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                                        (click)="saveRecipeMasterData(addRecipeMasterForm.valid)" *ngIf="!isEditPage">Add
+                                        Data</button>
+                                    <button type="submit" mat-raised-button color="warn" *ngIf="isEditPage"
+                                        (click)="saveRecipeMasterData(addRecipeMasterForm.valid)" class="ms-2 rounded-pill">
+                                        Save</button>
+                                </div>
+                        </div>
+                
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>

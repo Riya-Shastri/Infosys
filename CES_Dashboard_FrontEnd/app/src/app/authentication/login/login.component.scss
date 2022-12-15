@@ -1,0 +1,84 @@
+.sign-in-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image:  url("../../../assets/SVG/MaskGroup.svg")!important;
+    color: white;
+  }
+
+  .loginCard{
+    top: 20%;
+    text-align: center;
+    margin: 0px auto;
+    width: 300px;
+    height: 348px;
+    background: #DA291C 0% 0% no-repeat padding-box;
+    border-radius: 6px;
+    opacity: 1;
+    position: relative;
+}
+
+.loginCard figure img {
+  width: 65px;
+  margin: 25px auto;
+  display: block;
+}
+.loginCard .card-header {
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  background-color: #DA291C;
+  border: none;
+  color: #DA291C;
+  text-align: center;
+}
+
+.loginCard .card-footer {
+  padding: 0.5rem 1rem;
+  background-color : #DA291C;
+  border: none;
+}
+.loginCard .card-body {
+  flex: 1 1 auto;
+  padding: 0px !important;
+}
+.loginCard .card-body .card-custom-title{
+  padding: 1rem 1rem;
+}
+.loginCard .card-body .card-custom-btn{
+  padding: 1rem 3rem;
+}
+
+.loginCard .card-body .welcome {
+  margin: 5px;
+  font: 20px/32px Helvetica , sans-serif;
+  letter-spacing: 0px;
+}
+
+.loginCard .card-body h1 {
+  margin: 5px;
+  font: 500 24px/32px Helvetica Neue, sans-serif;
+  letter-spacing: 0px;
+}
+
+.loginCard .card-body .card-custom-btn button {
+  color: #DA291C!important;
+  background: #fff!important;
+  text-align: center;
+  border: none;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  padding: 8px 0;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+.loginCard .card-footer p a {
+  border: none!important;
+  text-decoration: none !important;
+  opacity: 1;
+  color: #fff;
+  font-size: 11px;
+}

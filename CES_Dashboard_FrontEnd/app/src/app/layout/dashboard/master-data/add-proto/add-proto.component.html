@@ -1,0 +1,97 @@
+<div class="add-container">
+    <form [formGroup]="protoTypeForm">
+        <div class="addLaserMd">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">CES TLA Part No.</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="ces_tla_part" placeholder="CES TLA PART No." id="ces_tla_part"
+                                type="text" *ngIf="isEditPage" readonly style="color: #857c7c;">
+                            <input matInput formControlName="ces_tla_part" placeholder="CES TLA Part No." id="ces_tla_part"
+                                type="text" *ngIf="!isEditPage">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Repack Type</label>
+                    <div>
+                        <mat-form-field class="w-100">
+                            <mat-select #matSelect='matSelect' formControlName="repack_type">
+                                <mat-option value="">Select Repack Type</mat-option>
+                                <mat-option class="custom-select" *ngFor="let line of dropDownDef; let i = index"
+                                    [value]="line">
+                                    {{line}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Inlet Catmod No.</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="inlet_catmod" placeholder="Inlet Catmod No." id="inlet_catmod"
+                                type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Outlet Catmod No.</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="outlet_catmod" placeholder="Outlet Catmod No."
+                                id="outlet_catmod" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Filter/Dpf Catmod No.</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="filter_catmod" placeholder="Filter/Dpf Catmod No." id="filter"
+                                type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Mixer</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="mixer" placeholder="Mixer" id="mixer" type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">Build Slot</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="build_slot" placeholder="Build Slot" id="build_slot"
+                                type="text">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <label class="fw-bold mb-2">FG Rack</label>
+                    <div>
+                        <mat-form-field appearance="outline" class="no-border w-100">
+                            <input matInput formControlName="fg_rack" placeholder="FG Rack" id="fg_rack" type="text">
+                        </mat-form-field>
+                        
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="text-end">
+                        <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                            (click)="dialogCancel()">Cancel</button>
+                        <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                            (click)="saveProtoTypeData(protoTypeForm.valid)" *ngIf="!isEditPage">Add Data</button>
+                        <button type="submit" mat-raised-button color="warn" *ngIf="isEditPage"
+                            (click)="saveProtoTypeData(protoTypeForm.valid)" class="ms-2 rounded-pill"> Save</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

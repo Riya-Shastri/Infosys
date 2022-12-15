@@ -1,0 +1,97 @@
+<form [formGroup]="planningForm" class="mt-3">
+    <div>
+        <div class="row mt-2">
+            <div class="col-md-4 col-lg-4">
+                <label class="fw-bold mb-2 planner">Planner Code
+                    <span class="text-danger"> * </span>
+                </label>
+                <div>
+                    <mat-form-field class="w-100">
+                        <mat-select formControlName="planner_id" (selectionChange)="selectedPlannerCode($event.value)">
+                            <mat-option value="ALL">ALL</mat-option>
+                            <mat-option class="custom-select" *ngFor="let PlCode of PlannerCodeList; let i = index"
+                                [value]="PlCode.planner_code">
+                                {{PlCode.planner_code}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="position-relative">
+                        <app-filter (filterData)="filterData($event)" [componentName]="'planning'">
+                        </app-filter>
+                    </div>
+                    <img matTooltip="Export To Excel" src="assets/SVG/file_upload.svg" alt="icon" class="mx-3"
+                        style="cursor: pointer;" (click)="exportBtnClick('export-to-excel')">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row mt-2">
+    <div class="col-12">
+        <form>
+            <div class="table-container">
+                <table mat-table [dataSource]="dataSource" #myTable class="border cal_input_table mat-elevation-z8"
+                    aria-describedby="planning">
+
+                    <ng-container *ngFor="let column of columns; ">
+
+                        <ng-container>
+                            <ng-container [matColumnDef]="column.columnDef">
+
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader">
+                                    {{column.header}}
+                                </th>
+
+                                <td mat-cell *matCellDef="let element ; let i = index;">
+                                    <div>
+                                        <span *ngIf="column.columnDef == 'component'" (click)="addStatus(element, i)"
+                                            matTooltip="Publish Comment"
+                                            style="cursor: pointer; text-decoration: underline;">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                        <span *ngIf="column.columnDef == 'run_date'">
+                                            {{element[column.columnDef] | date: 'MM-dd-yyyy'}}
+                                        </span>
+                                        <span *ngIf="column.columnDef == 'last_updated_date'">
+                                            {{element[column.columnDef] | date: 'MM-dd-yyyy'}}
+                                        </span>
+                                        <span
+                                            *ngIf="column.columnDef !== 'run_date' && column.columnDef !== 'component' && column.columnDef !== 'last_updated_date'">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                    </div>
+                                </td>
+
+                            </ng-container>
+                        </ng-container>
+
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+                    <tr mat-row *matRowDef="let element; let i = index; columns: tableColumns;">
+                    </tr>
+                </table>
+
+                <ng-container *ngIf="dataSource?.length == 0">
+                    <span class="text-danger m-5" style="display: block; text-align: center;">
+                        No records found
+                    </span>
+                </ng-container>
+
+            </div>
+
+        </form>
+        <mat-paginator class="matpaginTbl" #MatPaginator [length]="totalRecords"
+            [pageSizeOptions]="[10, 20, 30, 40, 50]" showFirstLastButtons (page)="onPaginateChange($event);">
+        </mat-paginator>
+    </div>
+
+</div>

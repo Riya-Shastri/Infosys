@@ -1,0 +1,44 @@
+
+.list-group-item {
+    z-index: 2;
+    color: #666666;
+    border-bottom-width: 0px;
+    background-color: transparent !important;
+    border-inline: none !important;
+    border-top: none !important;
+    font-size: medium !important;
+    border-color: #6666664d;
+    padding: 12px 0;
+    margin: 0 18px;
+    cursor: pointer;
+}
+::ng-deep .dark-theme .list-group-item{
+    color: #FFFF;
+}
+.list-group-item.active{
+    margin-left: -1px;
+    background-color: transparent !important;
+    border-inline: none !important;
+    border-top: none!important;
+    border-color: #e31b1b !important;
+    border-bottom-width: medium;
+}
+.list-group.border-bottom{
+    border-bottom: 1px solid #E5E5E5;
+}
+.sticky-tab{
+    position: sticky;
+    top: 64px;
+    z-index: 99;
+    background-color: #E8E8E8;
+    transition: all 0.4s;
+    white-space: nowrap;
+}
+.child-tab{
+    top: 46px !important;
+    z-index: 999;
+}
+.child-tab .list-group-item{
+padding-top: 18px;
+padding-bottom: 10px;
+}

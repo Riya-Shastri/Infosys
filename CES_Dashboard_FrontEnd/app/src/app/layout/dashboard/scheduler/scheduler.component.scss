@@ -1,0 +1,166 @@
+
+.table-container{
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
+table{
+    width: 100%;
+}
+//Release 2 Changes - CHG0116719 - Start <Phase 2 Changes code>
+.scrollContent {
+  height: 500px;
+  overflow-y: scroll;
+}
+.ces{
+  white-space: nowrap!important;
+}
+.part{
+  display: inline-block;
+  width: 204px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis 
+}
+//Release 2 Changes - CHG0116719 - End
+
+th.mat-header-cell{
+      white-space: nowrap;
+      word-wrap: break-word;
+      padding: 5px;  
+      letter-spacing: 0px;
+      opacity: 1;
+      font-weight: bold;    
+      font-size: 14px;
+      border-bottom: 2px solid rgb(99, 94, 94);
+}
+
+td.mat-cell{
+      padding: 0px 5px;
+      text-align: left;
+      letter-spacing: 0px;
+      color: #000000;
+      opacity: 1;    
+      font-weight: normal;
+      font-size: 13px/14px;     
+      outline: 1px solid #f8f8f8;
+      border-left: 1px solid #f8f8f8   
+ }
+
+.my-tooltip{
+  white-space: pre-line;
+  position: relative;
+  display: inline-block;
+  margin: 0px !important;
+}
+
+::ng-deep .mat-tooltip {
+  color: #fff;
+  border-radius: 4px;
+  margin: 0px !important;
+  max-width: 250px;
+  padding-left: 8px;
+  padding-right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transform: scale(0);
+  font-size: 14px!important;
+}
+
+.example-additional-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+  }
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: transparent; 
+}
+
+::ng-deep .mat-option .mat-pseudo-checkbox{ display: none; }
+
+.mat-form-field-infix{
+  border-top: unset;
+}
+
+:host ::ng-deep .mat-radio-container{
+  height: 15px;
+  width: 15px;
+}
+:host ::ng-deep .mat-radio-outer-circle{
+  height: 15px;
+  width: 15px;
+}
+:host ::ng-deep .mat-radio-inner-circle{
+  height: 15px;
+  width: 15px;
+}
+
+:host ::ng-deep .mat-radio-button .mat-radio-ripple{
+  height: 0px; 
+  width: 0px; 
+  left: calc(50% - 15px); 
+  top: calc(50% - 15px); 
+}
+
+::ng-deep .mat-chip.mat-standard-chip .mat-chip-remove{
+  color: #FFFF;
+  } 
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 19px;
+}
+
+.example-chip-list {
+  width: 100%;
+}
+
+.lockbutton{
+  background-color: #005587;
+  color: #ffff;
+}
+
+.checkcolumn{
+  display: flex;
+}
+.lockjob{
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.cdk-overlay-container .cdk-overlay-pane .testClass{
+  margin-top: 7%;
+  }
+  
+.mat-form-field.no-border .mat-form-field-infix {
+    border: unset !important;
+}
+
+.mat-table tr td .mat-form-field-infix {
+    border: unset;
+    padding-left: 0 !important;
+    padding-right: 0px !important;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+    padding: 0.4375em 0;
+}
+
+::ng-deep .dark-theme {
+
+  td.mat-cell{   
+    outline: 1px solid #f8f8f836;
+    border-left: 1px solid #f8f8f836;
+    background: #424242;
+  }
+
+  .mat-table tr td .mat-form-field-infix {
+    background: #424242!important;
+  }
+  
+}
+::ng-deep .fav{
+  padding: 3px 1px !important;
+  line-height: 1.4 !important;
+}

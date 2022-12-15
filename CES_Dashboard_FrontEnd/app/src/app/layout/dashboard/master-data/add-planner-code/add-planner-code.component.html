@@ -1,0 +1,74 @@
+<mat-dialog-content >
+        <div class="add-container">
+            <form [formGroup]="addPlannerCodeForm">
+                <div class="addLaserMd">             
+                    <div class="row">                        
+                            <div class="col-lg-3">
+                                <label class="fw-bold mb-2">Planner Code</label>
+                                <div>
+                                    <mat-form-field appearance="outline" class="no-border w-100">                                    
+                                        <input matInput formControlName="planner_code" type="text"
+                                        placeholder="Planner Code" id="planner_code" *ngIf="isEditPage" readonly class="plan">
+                                        <input matInput formControlName="planner_code" type="text"
+                                        placeholder="Planner Code" id="planner_code"  *ngIf="!isEditPage">  
+                                    </mat-form-field>                                      
+                                </div>              
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="fw-bold mb-2">Bom Check</label>
+                                <div>
+                                    <mat-form-field class="w-100">
+                                        <mat-select #matSelect='matSelect' formControlName="bom_check">
+                                            <mat-option value="">Select Bom Check</mat-option>
+                                            <mat-option class="custom-select" *ngFor="let line of driveDropdown; let i = index"
+                                                [value]="line">
+                                                {{line}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div> <div class="col-lg-3">
+                                <label class="fw-bold mb-2">Material Script Check</label>
+                                <div>
+                                    <mat-form-field class="w-100">
+                                        <mat-select #matSelect='matSelect' formControlName="material_script_check">
+                                            <mat-option value="">Select Material Script</mat-option>
+                                            <mat-option class="custom-select" *ngFor="let line of driveDropdown; let i = index"
+                                                [value]="line">
+                                                {{line}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="fw-bold mb-2">Planning Script Check</label>
+                                <div>
+                                    <mat-form-field class="w-100">
+                                        <mat-select #matSelect='matSelect' formControlName="planning_script_check">
+                                            <mat-option value="">Select Material Script</mat-option>
+                                            <mat-option class="custom-select" *ngFor="let line of driveDropdown; let i = index"
+                                                [value]="line">
+                                                {{line}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                                    
+                            <div class="col-12">
+                                    <div class="text-end">
+                                            <button mat-stroked-button color="warn" class="ms-2 rounded-pill"
+                                            (click)="dialogCancel()">CANCEL</button>
+                                        <button type="submit" mat-raised-button color="warn" class="ms-2 rounded-pill"
+                                        (click)="savePlannerCodeData(addPlannerCodeForm.valid)"  *ngIf="!isEditPage">ADD</button>
+                                        <button type="submit" mat-raised-button color="warn" *ngIf="isEditPage"
+                                        (click)="savePlannerCodeData(addPlannerCodeForm.valid)" class="ms-2 rounded-pill"> Save</button>                                     
+                                    </div>
+                            </div>
+                    
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-dialog-content>

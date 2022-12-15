@@ -1,0 +1,575 @@
+<form *ngIf="finalForm" [formGroup]="finalForm" class="mt-3">
+    <div>
+        <div class="row mt-2">
+
+            <div class="col-md-4 col-lg-4">
+                <label class="fw-bold mb-2"> Manufacturing Line
+                    <span class="text-danger"> * </span>
+                </label>
+                <div>
+                    <mat-form-field class="w-100">
+                        <mat-select #matSelect='matSelect' formControlName="line_id" (selectionChange)="selectedLine()">
+                            <mat-option class="custom-select" value=""> Select Manufacturing Line</mat-option>
+                            <mat-option class="custom-select" *ngFor="let line of manufacturingLine; let i = index"
+                                [value]="line.line_id" (click)="getselectedLine(line.line_name)">
+                                {{line.line_name}}
+                                <img [src]="line.ping ? 'assets/SVG/red-pin.svg' :  'assets/SVG/unpin.svg' "
+                                    height="15px" class="me-2" (click)=" openPinDialog(line.ping, i ,line.line_name)"
+                                    alt="pinIcon" />
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-4"></div>
+
+            <div class="col-md-4 col-lg-4" *ngIf="favoriteLines && favoriteLines.length > 0">
+                <div class="d-flex justify-content-end">
+                    <div class="text-end" *ngFor="let lines of favoriteLines">
+                        <div *ngIf="f['line_id'].value === lines['line_id']">
+                            <button mat-raised-button color="warn" class="m-2 rounded-pill fav"
+                                (click)="favoriteBtnClick(lines)">{{lines['line_name']}}</button>
+                        </div>
+                        <div *ngIf="f['line_id'].value !== lines['line_id']">
+                            <button mat-stroked-button color="warn" class="m-2 rounded-pill fav"
+                                (click)="favoriteBtnClick(lines)">{{lines['line_name']}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-2">
+
+        </div>      
+        
+        <div class="" *ngIf="f['line_id'].value && 
+        ( userRole.includes('CMP-User-Admin') || userRole.includes('CMP-Materials') )"  [hidden]="f['line_name'].value == 'PACK'">
+        <mat-radio-group aria-label="Select an option" formControlName="selectedStatusValue">
+            <mat-radio-button value="SEQ" (change)="selectRadioBtn($event)">SEQ</mat-radio-button>
+            <mat-radio-button value="JIT" (change)="selectRadioBtn($event)">JIT</mat-radio-button>
+            <mat-radio-button value="KIT" (change)="selectRadioBtn($event)">KIT</mat-radio-button>
+        </mat-radio-group>
+    </div> 
+
+        <div class="row mt-2" *ngIf="f && f['line_id'].value">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="position-relative d-flex align-items-center gap-3">
+                        <app-filter (filterData)="filterData($event)" [componentName]="'Final'">
+                        </app-filter> 
+                    </div>  
+
+                    <div class="d-flex align-items-center justify-content-between">
+
+                        <img matTooltip="Export To Excel" src="assets/SVG/file_upload.svg" alt="icon" class="mx-3"
+                            style="cursor: pointer;" (click)="exportBtnClick('export-to-excel')">
+
+                        <img matTooltip="Export To Mail" src="assets/SVG/exportEmail.svg" alt="Export-mail" class="mx-3"
+                            style="cursor: pointer;" (click)="exportBtnClick('export-to-email')">
+
+
+                        <mat-icon matTooltip="Refresh Table" (click)="refreshTable()" class="mx-3" style=" cursor: pointer;
+                            font-size: 33px;">
+                            refresh
+                        </mat-icon>
+                        
+                        <img matTooltip="Move Order" src="assets/SVG/moveorder.svg" alt="Move" class="mx-3 mt-2" *ngIf="isAccessflag && ( userRole.includes('CMP-User-Admin') ||
+                        userRole.includes('CMP-Materials') )" [hidden]="f['line_name'].value == 'PACK'" style="cursor: pointer;" (click)="moveOrder()">                 
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<div class="row mt-3" *ngIf="finalForm && f && f['line_id'].value">
+    <div class="col-12" *ngIf="finalTableForm">
+        <form [formGroup]="finalTableForm">
+            <div class="table-container scrollContent" #keywordsInput cdkScrollable>
+
+                <table mat-table [dataSource]="dataSource" #myTable formArrayName="tableData"
+                    class="border cal_input_FDtable mat-elevation-z8" aria-describedby="Final">
+                    <ng-container *ngIf="
+                    ( userRole.includes('CMP-User-Admin') ||
+                    userRole.includes('CMP-Materials') )
+                    " matColumnDef="select" class="checkcolumn" sticky >
+                        <th mat-header-cell *matHeaderCellDef id="check" [hidden]="f['line_name'].value == 'PACK'">
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()"
+                                *ngIf="(newtableData['routes'] || newtableData['routes']?.length > 0)">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row" [hidden]="f['line_name'].value == 'PACK'">
+                            <tr style="display: flex;">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                                </mat-checkbox>
+                            </tr>
+                        </td>
+                    </ng-container>
+
+                    <ng-container *ngFor="let column of newtableData['col'] ; ">
+
+                        <ng-container *ngIf="column.columnDef === 'job_num' ||
+                        column.columnDef === 'run_date'
+                        ||column.columnDef === 'mfg_qa_status_id' || 
+                        column.columnDef === 'seq_status_id' ||
+                        column.columnDef === 'kit_status_id' ||
+                        column.columnDef === 'ces_part_num' ||
+                        column.columnDef === 'inlet_ces_part_num' ||
+                        column.columnDef === 'filter_ces_part_num' ||
+                        column.columnDef === 'mixer_ces_part_num' ||
+                        column.columnDef === 'outlet_ces_part_num' ||
+                        column.columnDef === 'ces_part_num_catmod' ||
+                        column.columnDef === 'material_status' ||
+                        column.columnDef === 'subassembly_status_id' ||
+                        (column.columnDef === 'subassembly_q_status_id' && 
+                        f['line_name'].value == 'A2200') ||
+                        column.columnDef === 'planning_status' ||
+                        column.columnDef === 'job_flow'">
+
+                            <ng-container [matColumnDef]="column.columnDef" sticky style="left : 0px!important">
+
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader" [ngStyle]="{'left':
+                                (!newtableData['routes'] || newtableData['routes'].length == 0) ?
+                               '0px!important' : null }" style="border-collapse: separate ; ">
+
+                                    <div *ngIf=" column.columnDef === 'seq_status_id' ||
+                                    column.columnDef === 'kit_status_id'; else isStatus">
+                                        {{column.header}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+
+                                    <ng-template #isStatus style="max-width: 30px; min-width: 20px;"
+                                        style=" left : 0px!important">
+                                        {{column.header}}
+                                    </ng-template>
+                                </th>
+
+                                <td mat-cell *matCellDef="let element ; let i = index;" [formGroupName]="i"
+                                [ngClass]="(element.is_cancelled || element.edit_scheduled_qunatity) ? 'is_cancle' : 'null'">
+
+                                    <div *ngIf="column.columnDef === 'job_num'" (click)="jobStatus(element)">
+                                        <span style="cursor: pointer; text-decoration: underline;"
+                                            class="badge rounded-pill"
+                                            [ngStyle]="{ 'background-color' : element['status_color']}"
+                                            [matTooltip]="element['status_name']">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                    </div>
+
+                                    <div *ngIf="column.columnDef === 'run_date'" class="ces">
+                                        <span>
+                                            {{element[column.columnDef] | date: 'MM-dd-yy'}}
+                                        </span>
+                                    </div>
+
+                                    <div *ngIf="column.columnDef === 'ces_part_num' ||
+                                    column.columnDef === 'inlet_ces_part_num' ||
+                                    column.columnDef === 'filter_ces_part_num' ||
+                                    column.columnDef === 'mixer_ces_part_num' ||
+                                    column.columnDef === 'outlet_ces_part_num' ||
+                                    column.columnDef === 'ces_part_num_catmod'" class="ces">
+                                        <span>
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                    </div>
+
+                                    <span *ngIf="column.columnDef == 'mfg_qa_status_id'"
+                                        class="d-flex align-items-center">
+
+                                        <mat-form-field class="outline-none-input">
+
+                                            <mat-select #matSelect='matSelect' formControlName="mfg_qa_status_id"
+                                                (selectionChange)="getDropdownValue('mfg_qa_status_id' , i , element)"
+                                                matTooltip="{{( tableData.value[i] && tableData.value[i].mfg_qa_status_id && tableData.value[i].mfg_qa_status_id['status_name']) ?
+                                            tableData.value[i].mfg_qa_status_id['status_name'] : ''}}">
+                                                <mat-select-trigger
+                                                    *ngIf="tableData.value[i] && tableData.value[i].mfg_qa_status_id">
+                                                    <mat-icon
+                                                        [ngStyle]="{ color : ( tableData.value[i].mfg_qa_status_id['status_color']) ? tableData.value[i].mfg_qa_status_id['status_color'] : ''}">
+                                                        fiber_manual_record
+                                                    </mat-icon>
+                                                </mat-select-trigger>
+                                                <mat-option *ngFor="let drive of mfgQualityDropDown;" [value]="drive">
+                                                    <span>
+                                                        <mat-icon [ngStyle]="{ color : drive.status_color}">
+                                                            fiber_manual_record</mat-icon>
+                                                        {{drive.status_name}}
+                                                    </span>
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <img matTooltip="Add Comment" src="assets/SVG/addcomment.svg" alt="Add Comment"
+                                            class="mx-1" style="cursor: pointer;" [matMenuTriggerFor]="addComment"
+                                            *ngIf="(tableData.value[i] &&
+                                        tableData.value[i].mfg_qa_status_id && tableData.value[i].mfg_qa_status_id['status_id']) "
+                                            (click)="onClickAddComment(element , tableData.value[i].mfg_qa_status_id['status_id'] ,'mfg_qa_status_id')">
+                                            <span *ngIf="element['mfg_qa_comment_count'] !== 0" class="top-0 start-100 translate-middle badge rounded-pill bg-danger">{{element['mfg_qa_comment_count']}}</span>
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'seq_status_id'" class="d-flex align-items-center">
+                                        <mat-form-field class="outline-none-input">
+                                            <mat-select #matSelect='matSelect' formControlName="seq_status_id"
+                                                (selectionChange)="getDropdownValue('seq_status_id' , i , element)"
+                                                matTooltip="{{( tableData.value[i] &&
+                                                tableData.value[i].seq_status_id && tableData.value[i].seq_status_id['status_name']) ?
+                                            tableData.value[i].seq_status_id['status_name'] : ''}}">
+                                                <mat-select-trigger style="display: flex; align-items: center;"
+                                                    *ngIf="tableData.value[i] && tableData.value[i].seq_status_id">
+                                                    <mat-icon
+                                                        [ngStyle]="{ color : ( tableData.value[i].seq_status_id['status_color']) ? tableData.value[i].seq_status_id['status_color'] : ''}">
+                                                        fiber_manual_record
+                                                    </mat-icon>
+                                                </mat-select-trigger>
+                                                <mat-option *ngFor="let drive of seqDropDown;" [value]="drive">
+                                                    <mat-icon [ngStyle]="{ color : drive.status_color}">
+                                                        fiber_manual_record</mat-icon>
+                                                    {{drive.status_name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <img matTooltip="Add Comment" src="assets/SVG/addcomment.svg" alt="Add Comment"
+                                            class="mx-1" style="cursor: pointer;" [matMenuTriggerFor]="addComment"
+                                            *ngIf="(tableData.value[i] &&
+                                    tableData.value[i].seq_status_id && tableData.value[i].seq_status_id['status_id']) "
+                                            (click)="onClickAddComment(element ,tableData.value[i].seq_status_id['status_id'] , 'seq_status_id')">
+                                            <span *ngIf="element['seq_comment_count'] !==0" class="top-0 start-100 translate-middle badge rounded-pill bg-danger">{{element['seq_comment_count']}}</span>
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'kit_status_id'" class="d-flex align-items-center">
+                                        <mat-form-field class="outline-none-input">
+
+                                            <mat-select #matSelect='matSelect' formControlName="kit_status_id"
+                                                (selectionChange)="getDropdownValue('kit_status_id' , i , element)"
+                                                matTooltip="{{(tableData.value[i] && tableData.value[i].kit_status_id && 
+                                                tableData.value[i].kit_status_id['status_name']) ?
+                                            tableData.value[i].kit_status_id['status_name'] : ''}}">
+                                                <mat-select-trigger style="display: flex; align-items: center;"
+                                                    *ngIf="tableData.value[i] && tableData.value[i].kit_status_id">
+                                                    <mat-icon
+                                                        [ngStyle]="{ color : (tableData.value[i].kit_status_id && tableData.value[i].kit_status_id['status_color']) ? tableData.value[i].kit_status_id['status_color'] : ''}">
+                                                        fiber_manual_record
+                                                    </mat-icon>
+                                                </mat-select-trigger>
+                                                <mat-option *ngFor="let drive of kitDropDown" [value]="drive">
+                                                    <mat-icon [ngStyle]="{ color : drive.status_color}">
+                                                        fiber_manual_record</mat-icon>
+                                                    {{drive.status_name}}
+                                                </mat-option>
+                                            </mat-select>
+
+                                        </mat-form-field>
+
+                                        <img matTooltip="Add Comment" src="assets/SVG/addcomment.svg" alt="Add Comment"
+                                            class="mx-1" style="cursor: pointer;" [matMenuTriggerFor]="addComment"
+                                            *ngIf="(tableData.value[i] &&
+                                        tableData.value[i].kit_status_id && tableData.value[i].kit_status_id['status_id']) "
+                                            (click)="onClickAddComment(element , tableData.value[i].kit_status_id['status_id'] , 'kit_status_id')">
+                                            <span *ngIf="element['kit_comment_count'] !==0" class="top-0 start-100 translate-middle badge rounded-pill bg-danger">{{element['kit_comment_count']}}</span>
+                                        </span>
+
+                                    <span *ngIf="column.columnDef == 'subassembly_q_status_id' && f['line_name'].value == 'A2200' "
+                                        class="d-flex align-items-center">
+                                        <mat-form-field class="outline-none-input">
+
+                                            <mat-select #matSelect='matSelect' formControlName="subassembly_q_status_id"
+                                                (selectionChange)="getDropdownValue('subassembly_q_status_id' , i , element)"
+                                                matTooltip="{{(tableData.value[i] && tableData.value[i].subassembly_q_status_id && 
+                                                tableData.value[i].subassembly_q_status_id['status_name']) ?
+                                            tableData.value[i].subassembly_q_status_id['status_name'] : ''}}">
+
+                                                <mat-select-trigger style="display: flex; align-items: center;"
+                                                    *ngIf="tableData.value[i] && tableData.value[i].subassembly_q_status_id">
+                                                    <mat-icon
+                                                        [ngStyle]="{ color : (tableData.value[i].subassembly_q_status_id && 
+                                                            tableData.value[i].subassembly_q_status_id['status_color']) ? 
+                                                            tableData.value[i].subassembly_q_status_id['status_color'] : ''}">
+                                                        fiber_manual_record
+                                                    </mat-icon>
+                                                </mat-select-trigger>
+
+                                                <mat-option *ngFor="let drive of QSubAssemblyDropDown" [value]="drive">
+                                                    <mat-icon [ngStyle]="{ color : drive.status_color}">
+                                                        fiber_manual_record</mat-icon>
+                                                    {{drive.status_name}}
+                                                </mat-option>
+
+                                            </mat-select>
+
+                                        </mat-form-field>
+
+                                        <img matTooltip="Add Comment" src="assets/SVG/addcomment.svg" alt="Add Comment"
+                                            class="mx-1" style="cursor: pointer;" [matMenuTriggerFor]="addComment"
+                                            *ngIf="(tableData.value[i] &&
+                                    tableData.value[i].subassembly_q_status_id && tableData.value[i].subassembly_q_status_id['status_id']) "
+                                            (click)="onClickAddComment(element , tableData.value[i].subassembly_q_status_id['status_id'] , 'subassembly_q_status_id')">
+                                            <span *ngIf="element['sub_assembly_q_comment_count'] !==0" class="top-0 start-100 translate-middle badge rounded-pill bg-danger">{{element['sub_assembly_q_comment_count']}}</span>
+                                        </span>
+
+                                    <span *ngIf="column.columnDef == 'subassembly_status_id'"
+                                        style="text-align: center; display: block;">
+                                        <button class="subassemblybutton" (click)="getsubassembly(element)" [ngStyle]="{ 'background-color' : element['subassembly_status_colour'], 'border' : 
+                                        element['subassembly_status_colour']}"
+                                            [matTooltip]="element['subassembly_status_name']"></button>
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'material_status'"
+                                        style="text-align: center; display: block; ">
+                                        <div *ngIf="element['mat_run_count'] == 0">
+                                            <button class="subassemblybutton"
+                                                style="background-color : black; border : black;  cursor: text;"
+                                                matTooltip="Not-Started"></button>
+                                        </div>
+                                        <div *ngIf="element['mat_run_count'] > 0">
+                                            <div *ngIf="element['mat_short_count'] > 0">
+                                                <button class="subassemblybutton" (click)="getMaterialStatus(element)"
+                                                    style="background-color : red; border : red; cursor: pointer;"
+                                                    matTooltip="Problem"></button>
+                                            </div>
+                                            <div *ngIf="element['mat_short_count'] == 0">
+                                                <button class="subassemblybutton"
+                                                    style="background-color : green; border : green;  cursor: text;"
+                                                    matTooltip="Complete"></button>
+                                            </div>
+                                        </div>
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'planning_status'"
+                                        style="text-align: center; display: block;">
+                                        <div *ngIf="element['plan_run_count'] == 0">
+                                            <button class="subassemblybutton"
+                                                style="background-color : black; border : black;  cursor: text;"
+                                                matTooltip="Not-Started"></button>
+                                        </div>
+                                        <div *ngIf="element['plan_run_count'] > 0">
+                                            <div *ngIf="element['plan_short_count'] > 0">
+                                                <button class="subassemblybutton" (click)="getPlanningStatus(element)"
+                                                    style="background-color : red; border : red; cursor: pointer"
+                                                    matTooltip="Problem"></button>
+                                            </div>
+                                            <div *ngIf="element['plan_short_count'] == 0">
+                                                <button class="subassemblybutton"
+                                                    style="background-color : green; border : green;  cursor: text;"
+                                                    matTooltip="Complete"></button>
+                                            </div>
+                                        </div>
+                                    </span>
+
+                                    <span *ngIf="column.columnDef == 'job_flow'" style="text-align: center; display: block;">                                        
+                                        <img  src="assets/SVG/jobFlow.svg" alt="icon" style="cursor: pointer;"
+                                         (click)="jobFlow(element)">                                     
+                                    </span>
+
+                                </td>
+                            </ng-container>
+
+                        </ng-container>
+
+                        <ng-container *ngIf="column.columnDef !== 'job_num' &&
+                        column.columnDef !== 'run_date' &&
+                        column.columnDef !== 'mfg_qa_status_id' && 
+                        column.columnDef !== 'seq_status_id' &&
+                        column.columnDef !== 'kit_status_id' &&
+                        column.columnDef !== 'ces_part_num' &&
+                        column.columnDef !== 'inlet_ces_part_num' &&
+                        column.columnDef !== 'filter_ces_part_num' &&
+                        column.columnDef !== 'mixer_ces_part_num' &&
+                        column.columnDef !== 'outlet_ces_part_num' &&
+                        column.columnDef !== 'ces_part_num_catmod' &&
+                        column.columnDef !== 'material_status' &&
+                        column.columnDef !== 'subassembly_status_id' &&
+                        column.columnDef !== 'subassembly_q_status_id' &&
+                        column.columnDef !== 'planning_status' && 
+                        column.columnDef !== 'job_flow'">
+
+                            <ng-container [matColumnDef]="column.columnDef">
+
+                                <th mat-header-cell *matHeaderCellDef id="columnHeader" class="matHeader">
+                                    {{column.header}}
+                                </th>
+
+                                <td mat-cell *matCellDef="let element ; let i = index;" [formGroupName]="i"
+                                [ngClass]="(element.is_cancelled || element.edit_scheduled_qunatity) ? 'is_cancle' : 'null'">
+                                    <div>
+                                        <span *ngIf="column.columnDef !== 'customer_due_date' &&
+                                            column.columnDef !== 'subassembly_status_id' &&
+                                            column.columnDef !== 'comments' &&
+                                            column.columnDef !== 'firsttime_runner' &&
+                                            column.columnDef !== 'part_description' &&
+                                            column.columnDef !=='scheduled_qunatity'">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                        <span *ngIf="column.columnDef == 'part_description'"
+                                        class="part" [matTooltip]="element['part_description']">
+                                           {{element[column.columnDef]}}
+                                        </span>
+                                        <!-- <span *ngIf="column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                        !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                        (element['updated_parent'] || element['updated_module']) && element['internal_customer'] ? 
+                                         (element['updated_parent'] ? element['updated_parent'] : element['updated_module'])+ ' / ' +
+                                        element['internal_customer'] +
+                                        ' is updated. ': 
+                                         (element.is_cancelled && (element['deleted_parent'] || element['deleted_module']) && 
+                                         element['internal_customer'])  ?  (element['deleted_parent'] ? element['deleted_parent'] : element['deleted_module'])+ ' / ' +
+                                        element['internal_customer'] + ' is cancelled. ': ''">
+                                        {{element[column.columnDef]}}
+                                        </span> -->
+                                        <span *ngIf="finalForm.value['is_parent']  &&
+                                    column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                    !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_module']) ? 
+                                     (element['updated_canning'] ? element['updated_canning'] : element['updated_module'])+
+                                    ' is updated. ': 
+                                     element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_canning'] && element['deleted_module'])
+                                     ?(element['deleted_canning']) +' and '+ (element['deleted_module'])+
+                                    ' is cancelled. ':
+                                     element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_canning'] || element['deleted_module'])
+                                     ?(element['deleted_canning'] ? element['deleted_canning'] : element['deleted_module'])+ 
+                                    ' is cancelled. ': 
+                                    element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_module']) && (element['deleted_canning'] && element['deleted_module']) 
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_module']) +
+                                    ' is updated. and ' + (element['deleted_canning']) +' and '+ (element['deleted_module']) + 
+                                    ' is cancelled. ':
+                                     element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_module'])&&(element['deleted_canning'] || element['deleted_module'])
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_module'])+
+                                     ' is updated. and '+(element['deleted_canning'] ? element['deleted_canning'] : element['deleted_module'])+
+                                    ' is cancelled. ': ''">
+                                    {{element[column.columnDef]}}
+                                    </span>
+
+                                    <span *ngIf="finalForm.value['is_module']  &&
+                                    column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                    !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_parent'] || element['updated_canning']) ? 
+                                     (element['updated_canning'] ? element['updated_canning'] : element['updated_parent'])+
+                                    ' is updated. ': 
+                                     element.is_cancelled && !element.edit_scheduled_qunatity &&(element['deleted_canning'] && element['deleted_parent'])
+                                     ?(element['deleted_canning']) +' and '+ (element['deleted_parent'])+
+                                    ' is cancelled. ':
+                                    element.is_cancelled && !element.edit_scheduled_qunatity &&(element['deleted_canning'] || element['deleted_parent'])?  (element['deleted_canning'] ? element['deleted_canning'] : element['deleted_parent'])+ 
+                                    ' is cancelled. ':
+                                    element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_parent']) && (element['deleted_canning'] && element['deleted_parent']) 
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_parent']) +
+                                    ' is updated. and ' + (element['deleted_canning']) +' and '+ (element['deleted_parent']) + 
+                                    ' is cancelled. ':
+                                     element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_canning'] || element['updated_parent'])&&(element['deleted_canning'] || element['deleted_parent'])
+                                     ?(element['updated_canning'] ? element['updated_canning'] : element['updated_parent'])+
+                                     ' is updated. and '+(element['deleted_canning'] ? element['deleted_canning'] : element['deleted_parent'])+
+                                    ' is cancelled. ': ''">
+                                    {{element[column.columnDef]}}
+                                    </span>
+                                    <span *ngIf="finalForm.value['is_canning'] &&
+                                    column.columnDef == 'scheduled_qunatity'" [matTooltip]="
+                                    !element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_parent'] || element['updated_module']) ? 
+                                     (element['updated_parent'] ? element['updated_parent'] : element['updated_module'])+
+                                    ' is updated. ':
+                                    element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_parent'] && element['deleted_module'])
+                                    ?(element['deleted_parent']) +' and '+ (element['deleted_module'])+
+                                   ' is cancelled. ': 
+                                     element.is_cancelled && !element.edit_scheduled_qunatity && (element['deleted_parent'] || element['deleted_module'])
+                                     ?  (element['deleted_parent'] ? element['deleted_parent'] : element['deleted_module'])+ 
+                                    ' is cancelled. ':
+                                    element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_module'] || element['updated_parent']) && (element['deleted_module'] && element['deleted_parent']) 
+                                     ?(element['updated_module'] ? element['updated_module'] : element['updated_parent']) +
+                                    ' is updated. and ' + (element['deleted_module']) +' and '+ (element['deleted_parent']) + 
+                                    ' is cancelled. ':
+                                     element.is_cancelled && element.edit_scheduled_qunatity && 
+                                    (element['updated_module'] || element['updated_parent'])&&(element['deleted_module'] || element['deleted_parent'])
+                                     ?(element['updated_module'] ? element['updated_module'] : element['updated_parent'])+
+                                     ' is updated. and '+(element['deleted_module'] ? element['deleted_module'] : element['deleted_parent'])+
+                                    ' is cancelled. ': ''">
+                                    {{element[column.columnDef]}}
+                                    </span>
+                                        <span *ngIf="column.columnDef == 'firsttime_runner'">
+                                            {{element[column.columnDef] ? 'Yes' : 'No'}}
+                                        </span>
+                                        <span *ngIf="column.columnDef == 'customer_due_date'" class="ces">
+                                            {{element[column.columnDef] | date: 'MM-dd-yyyy'}}
+                                        </span>
+                                        <span *ngIf="column.columnDef == 'comments'"
+                                            [matTooltip]="element[column.columnDef]" class="fdcomment large"
+                                            matTooltipClass="my-custom-tooltip large">
+                                            {{element[column.columnDef]}}
+                                        </span>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                        </ng-container>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="tableColumns;sticky : true"></tr>
+                    <tr mat-row *matRowDef="let element; let i = index; columns: tableColumns;" [formGroupName]="i">
+                    </tr>
+
+                </table>
+
+                <ng-container
+                    *ngIf="norecord && (f['line_id'].value &&( !newtableData['routes'] || newtableData['routes']?.length == 0))">
+                    <span class="text-danger m-5" style="display: block; text-align: center;">
+                        No records found
+                    </span>
+                </ng-container>
+            </div>
+        </form>
+    </div>
+
+    <mat-menu (click)="stopprop($event)" #addComment="matMenu" [overlapTrigger]="false" yPosition="below"
+        xPosition="after" class="addComment">
+        <div class="addComment2">
+            <mat-icon style="cursor: pointer; margin-left : 93%;" mat-dialog-close>close</mat-icon>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <p class="addComment1">Comment
+                </p>
+            </div>
+            <div class="saveImage" (click)="saveComment()">
+                <img src="assets/SVG/save-comment.svg" alt="icon" style="cursor: pointer;">
+            </div>
+        </div>
+        <div style="padding: 10px; margin-top:-20px">
+            <div (click)="stopprop($event)">
+                <div>
+                    <textarea class="textArea" [(ngModel)]="newComment" id="comment">
+                       </textarea>
+                </div>
+                <div class="commentHistory" *ngIf="commentList && commentList.length > 0">
+                    <div *ngFor="let add of commentList">
+                        <p>{{add['comments']}}</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <mat-icon [ngStyle]="{ color : add['status_color']}" style="margin-left: -5px;">
+                                fiber_manual_record</mat-icon>
+                            <span>{{add['last_updated_date'] | date: 'MM-dd-yyyy HH:mm:ss'}}</span>
+                            <span>{{add['last_updated_by']}}</span>
+                        </div>
+                        <mat-divider></mat-divider>
+                    </div>
+                </div>
+                <div class="commentHistory" *ngIf="!commentList || commentList.length == 0">
+                    <p>No comment</p>
+                </div>
+            </div>
+        </div>
+    </mat-menu>
+
+</div>

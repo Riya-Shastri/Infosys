@@ -1,0 +1,247 @@
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: transparent; 
+}
+
+.table-container{
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-x: auto;
+    height: 500px;
+  }
+  .scrollContent {
+    height: 500px;
+    overflow-y: scroll;
+  }
+  table{
+      width: 100%;
+  }
+  //Release 2 Changes - CHG0116719 - Start <Phase 2 Changes code>
+  .ces{
+    white-space: nowrap;
+  }
+  .part{
+    display: inline-block;
+    width: 204px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis 
+  }
+  //Release 2 Changes - CHG0116719 - End
+  .mat-row:nth-child(odd) .mat-cell {
+    background-color: #cacbcc;
+ }
+
+  th.mat-header-cell{
+        white-space: nowrap;
+        word-wrap: break-word;
+        padding: 5px;  
+        letter-spacing: 0px;
+        opacity: 1;
+        font-weight: bold;    
+        font-size: 14px;
+        // left: 0px!important;
+        border-bottom: 2px solid rgb(99, 94, 94);
+  }
+  
+  td.mat-cell{
+        padding: 5px;
+        text-align: left;
+        letter-spacing: 0px;
+        color: #000000;
+        opacity: 1;    
+        font-weight: normal;
+        font-size: 13px/14px; 
+        //Release 2 Changes - CHG0116719 - Start <Phase 2 Changes code>  
+        //width : 100%;
+        //Release 2 Changes - CHG0116719 - End
+        outline: 1px solid #f8f8f8;
+        border-left: 1px solid #f8f8f8;
+   }
+
+  .example-additional-selection {
+      opacity: 0.75;
+      font-size: 0.75em;
+    }
+
+  ::ng-deep .mat-option .mat-pseudo-checkbox{ display: none; }
+  
+ .subassemblybutton {
+    padding: 2px 3px !important;
+    line-height: 1 !important;
+    border-radius: 90% !important;
+    height: 20px;
+    width: 20px;
+    border : solid
+}
+  .mat-form-field-infix{
+    border-top: unset;
+  }
+  //chnage radio button size
+  :host ::ng-deep .mat-radio-container{
+    height: 15px;
+    width: 15px;
+  }
+  :host ::ng-deep .mat-radio-outer-circle{
+    height: 15px;
+    width: 15px;
+  }
+  :host ::ng-deep .mat-radio-inner-circle{
+    height: 15px;
+    width: 15px;
+  }
+  
+  :host ::ng-deep .mat-radio-button .mat-radio-ripple{
+    height: 0px; 
+    width: 0px; 
+    left: calc(50% - 15px);
+    top: calc(50% - 15px); 
+  }
+  
+  .mat-radio-button ~ .mat-radio-button {
+    margin-left: 19px;
+  }
+  
+  .example-chip-list {
+    width: 100%;
+  }
+  
+  .cdk-overlay-container .cdk-overlay-pane .testClass{
+    margin-top: 7%;
+    }
+    
+  .mat-form-field.no-border .mat-form-field-infix {
+      border: unset !important;
+  }
+
+  .mat-table tr td .mat-form-field-infix {
+      border: unset;
+      padding-left: 0 !important;
+      padding-right: 0px !important;
+  }
+
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+      padding: 0.4375em 0;
+  }
+
+  ::ng-deep .addComment.mat-menu-panel {
+  width:370px;
+  max-width: 410px;
+  }
+
+::ng-deep .mat-menu-panel{
+  max-width: 450px;
+}
+.checkcolumn{
+  display: flex;
+}
+
+.addComment1{
+  font-family:  'Helvetica Neue', sans-serif!important;  
+  font-weight: bold;
+  color: black; 
+  text-align: left;
+  opacity: 1; 
+  padding: 10px;  
+  white-space: nowrap;  
+    
+}
+
+.addComment2{
+  color: black;  
+}
+
+.commentHistory{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #A3A3A3;
+  border-radius: 3px;
+  opacity: 1;
+  color: #000000;  
+  font-family:  'Helvetica Neue', sans-serif!important;  
+  text-align: left;
+  padding: 5px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  height : 150px;  
+}
+
+::ng-deep .commentTime{
+  font-size: 12px;
+  span{
+    letter-spacing: 0px;
+    right: 0!important;
+    text-align: right!important;
+    margin-left : 3px
+  }
+}
+
+.lockbutton{
+  background-color: #005587;
+  color: #ffff;
+}
+
+.textArea{
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  min-height : 50px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.saveImage{
+  padding: 10px;
+  margin-bottom: 10px;
+}
+::ng-deep .matHeader .mat-sort-header-arrow{
+  display: none!important;
+   
+}
+::ng-deep .matHeader .mat-sort-header-content {
+  margin-right : 5px!important;
+  cursor: text;  
+}
+
+::ng-deep .dark-theme {
+
+  td.mat-cell{   
+    outline: 1px solid #f8f8f836;
+    border-left: 1px solid #f8f8f836;
+    background: #424242;
+  }
+
+  .mat-table tr td .mat-form-field-infix {
+    background: #424242!important;
+  }
+ 
+}
+.fdcomment{
+  display: inline-block;
+  width: 90px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis 
+}
+
+::ng-deep .mat-tooltip  {
+  white-space: pre-line !important;
+  max-width: 400px !important;
+  font-size: 13px;
+  max-height: 1000px!important;
+  word-break: break-word;
+}
+::ng-deep .fav{
+  padding: 3px 1px !important;
+  line-height: 1.4 !important;
+}
+::ng-deep .dark-theme mat-divider{
+  border-top-color: black!important;
+}
+.is_cancle{
+  //   border-top: #b80606 2px solid !important;
+  // border-bottom: #b80606 2px solid !important;
+  // padding: 10px 0px!important;
+background-color: #d37474!important;
+  //color: #000000!important;
+  }

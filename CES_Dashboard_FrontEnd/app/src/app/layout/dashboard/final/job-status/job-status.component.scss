@@ -1,0 +1,50 @@
+.jobStatus{
+      height: 320px;
+      width: 400px;
+      
+}.commentHistory{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #A3A3A3;
+    border-radius: 3px;
+    opacity: 1;
+    color: black;
+    font-family:  'Helvetica Neue', sans-serif!important;  
+    padding: 10px;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    height : 150px;  
+    width: 405px;
+    margin-left : 10px;    
+    margin-top: 10px;
+    white-space: nowrap;
+    word-wrap: break-word;
+    margin-bottom: 15px;
+}
+.textArea{
+    min-height : 40px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #A3A3A3;
+    border-radius: 3px;
+    opacity: 1;
+    color: black;
+  }
+  button{
+    margin: 5px;
+    left: 10px;
+}
+.commentTime{
+    font-size: 13px;    
+  }
+  
+.complete{ color:green}
+.in-process{color : #FFE36E}
+.ready{ color: blue}
+.problem{ color: red}
+.hot-jobs { color: purple}
+.in-complete{ color: red}
+.not-started{color :white}
+
+::ng-deep .dark-theme mat-divider{
+  border-top-color: black!important;
+}
